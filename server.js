@@ -18,16 +18,14 @@ const otpStore = new Map();
 app.use(cors());
 app.use(express.json());
 
-// Define the root path explicitly pointing to the main project folder
-const rootPath = path.join(__dirname, '..');
+// Set rootPath to the current directory where index.html and assets reside
+const rootPath = path.join(__dirname);
 
-// Serve static files (CSS, JS, images) from the main root folder
 app.use(express.static(rootPath));
 app.use('/css', express.static(path.join(rootPath, 'css')));
 app.use('/js', express.static(path.join(rootPath, 'js')));
 app.use('/images', express.static(path.join(rootPath, 'images')));
 
-// Serve index.html on the main route
 app.get('/', (req, res) => {
     res.sendFile(path.join(rootPath, 'index.html'));
 });
