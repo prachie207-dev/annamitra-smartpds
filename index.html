@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AnnaMitra (अन्नमित्र) - Smart Public Distribution System (SmartPDS). Transparent, corruption-free ration distribution platform with WebAuthn biometrics, 3 daytime digital tokens, and trilingual interface.">
+    <meta name="keywords" content="AnnaMitra, Ration Store, SmartPDS, Ration Card, Maharashtra PDS, Public Distribution System, Digital Token, Food Security, Biometric Login">
+    <meta name="author" content="Government of Maharashtra / SmartPDS Initiative">
+    
+    <title>अन्नमित्र | ANNAMITRA - Smart Public Distribution System</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/citizen.css">
+    <link rel="stylesheet" href="css/shopkeeper.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- Top Government Emblem Ribbon -->
+    <div class="gov-top-ribbon">
+        <div class="gov-ribbon-content">
+            <div class="gov-emblem-badge">
+                <span class="gov-emblem-icon">🏛️</span>
+                <span>महाराष्ट्र शासन • अन्न, नागरी पुरवठा व ग्राहक संरक्षण विभाग | Government of Maharashtra</span>
+            </div>
+            <div class="gov-ribbon-right">
+                <a href="tel:1800224950" class="helpline-link" id="ribbon-helpline">📞 १८००-२२-४९५० (टोल फ्री)</a>
+                <span class="live-clock-badge" id="header-live-clock">Loading time...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Header with Official Circular Emblem Logo & Trilingual Selector -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-section" onclick="window.annasetuAuth && window.annasetuAuth.showView('view-homepage')">
+                <!-- Official Circular Emblem Logo -->
+                <div class="brand-logo-wrap">
+                    <img src="/images/my-logo.png" alt="Ration Store Smart PDS Logo" class="brand-logo-img" id="app-brand-logo" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                </div>
+                <div class="brand-title-wrap">
+                    <h1 data-i18n="appTitle">अन्नमित्र</h1>
+                    <p data-i18n="appSubtitle">स्मार्ट सार्वजनिक वितरण प्रणाली (महाराष्ट्र शासन)</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <!-- Trilingual Switcher (Marathi, Hindi, English) -->
+                <div class="language-selector-bar" role="group" aria-label="Language Selector">
+                    <button class="lang-btn active" data-lang="mr">मराठी</button>
+                    <button class="lang-btn" data-lang="hi">हिंदी</button>
+                    <button class="lang-btn" data-lang="en">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Logged-in User Session Bar -->
+    <div class="logged-in-user-bar" id="logged-in-user-bar">
+        <div class="logged-in-user-content">
+            <div class="user-identity-box">
+                <span id="user-identity-text">👤 Logged in as: <strong id="logged-in-user-name">Santoshrao Gaikwad</strong> (<span id="logged-in-user-role">MH-PDS-2026-0001</span>)</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="btn btn-sm btn-outline" id="btn-session-home" style="background:#fff; color:#0b2545; font-weight:700;">🏠 मुख्य पृष्ठ (Home)</button>
+                <button class="btn btn-sm btn-danger" id="btn-global-logout" data-i18n="logout">लॉगआउट 🚪</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Body Wrapper -->
+    <main class="main-wrapper">
+
+        <!-- =========================================================================
+             VIEW 1: HOMEPAGE / LANDING PORTAL
+             ========================================================================= -->
+        <section id="view-homepage" class="app-view-container view-active">
+            
+            <!-- Hero Container -->
+            <div class="home-hero-container">
+                <div class="hero-emblem-badge-wrap">
+                    <img src="/images/my-logo.png" alt="Ration Store Emblem" class="hero-emblem-badge-img" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                </div>
+                <span class="hero-tagline" data-i18n="heroTag">RATION STORE • SMART RATION, STRONG NATION</span>
+                <h1 class="hero-main-heading" data-i18n="heroTitle">स्मार्ट सार्वजनिक वितरण प्रणाली (SMARTPDS)</h1>
+                <p class="hero-subtext" data-i18n="heroSubtitle">
+                    महाराष्ट्रातील प्रत्येक पात्र कुटुंबाला पारदर्शक, जलद व हक्काचे धान्य वाटप करण्याची आधुनिक डिजिटल प्रणाली.
+                </p>
+
+                <button class="hero-cta-btn" onclick="document.getElementById('role-chooser-section').scrollIntoView({ behavior: 'smooth' })" data-i18n="exploreServicesBtn">
+                    🚀 सेवा सुरू करा
+                </button>
+
+                <div class="hero-illustrations-row">
+                    <span title="Food Grains">🌾</span>
+                    <span title="Supply Chain Truck">🚚</span>
+                    <span title="Fair Price Shop">🏪</span>
+                    <span title="Citizen Families">👨‍👩‍👧‍👦</span>
+                </div>
+            </div>
+
+            <!-- Official Notice Banner -->
+            <div class="gov-notice-banner">
+                <div>
+                    <span>📢</span>
+                    <strong>सूचना / Notice:</strong> ऑगस्ट २०२६ महिन्याचे धान्य वाटप १ ऑगस्टपासून सुरू झाले आहे.
+                </div>
+                <div>
+                    <span>📌</span>
+                    <span>गर्दी टाळण्यासाठी ऑनलाइन टोकन बुकिंग ३ सत्रांमध्ये उपलब्ध आहे.</span>
+                </div>
+                <div>
+                    <span>☎️</span>
+                    <span>मदत व तक्रारींसाठी टोल-फ्री क्रमांक: <strong>१८००-२२-४९५०</strong></span>
+                </div>
+            </div>
+
+            <!-- Role Selector ("Who Are You?") -->
+            <div class="role-chooser-section" id="role-chooser-section">
+                <div class="section-headline-center">
+                    <h2 data-i18n="whoAreYouTitle">तुम्ही कोण आहात? निवडा</h2>
+                    <p data-i18n="whoAreYouSubtitle">आपल्या भूमिकेनुसार खालील योग्य पोर्टल निवडा:</p>
+                </div>
+
+                <div class="role-cards-grid">
+                    <!-- 1. Citizen Gateway -->
+                    <div class="home-role-card" data-target-role="citizen">
+                        <div class="role-card-icon">👨‍👩‍👧‍👦</div>
+                        <div>
+                            <h3 data-i18n="roleCardCitizenTitle">नागरिक / कार्डधारक</h3>
+                            <p data-i18n="roleCardCitizenDesc">बायोमेट्रिक, पिन किंवा फोन OTP ने लॉगिन करा, कोटा तपासा आणि ३ वेळेचे टोकन बुक करा.</p>
+                        </div>
+                        <div class="role-card-footer-btn">
+                            <span>नागरिक पोर्टलवर जा</span>
+                            <span>➔</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Shopkeeper Gateway -->
+                    <div class="home-role-card" data-target-role="shopkeeper">
+                        <div class="role-card-icon">🏪</div>
+                        <div>
+                            <h3 data-i18n="roleCardShopkeeperTitle">रास्त भाव दुकानदार</h3>
+                            <p data-i18n="roleCardShopkeeperDesc">टोकन व OTP द्वारे धान्य वाटप करा, साठा तपासा, सदस्य जोडा किंवा मयत सदस्य वगळा.</p>
+                        </div>
+                        <div class="role-card-footer-btn">
+                            <span>दुकानदार पोर्टलवर जा</span>
+                            <span>➔</span>
+                        </div>
+                    </div>
+
+                    <!-- 3. Admin Gateway (Direct 1-Click Entry) -->
+                    <div class="home-role-card" data-target-role="admin">
+                        <div class="role-card-icon">🏛️</div>
+                        <div>
+                            <h3 data-i18n="roleCardAdminTitle">शासकीय अधिकारी कक्ष</h3>
+                            <p data-i18n="roleCardAdminDesc">थेट राज्यभरातील साठा मॉनिटरिंग, AI संशयित व्यवहार शोध व दुकानदार विनंत्या मंजुरी डेस्क.</p>
+                        </div>
+                        <div class="role-card-footer-btn" style="background:#0b2545; color:#fff;">
+                            <span>कंट्रोल रूममध्ये थेट प्रवेश ➔</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Statewide Public Statistics -->
+            <div class="section-card">
+                <div class="section-header-row">
+                    <div class="section-title-wrap">
+                        <h2>📊 राज्यस्तरीय थेट आकडेवारी (Live Public Statistics)</h2>
+                        <p>सर्व डेटा थेट शासकीय डेटाबेसशी सिंक झालेला आहे.</p>
+                    </div>
+                </div>
+
+                <div class="admin-stats-grid">
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">🏪</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label">सक्रिय रास्त भाव दुकाने</span>
+                            <div class="stat-number">52,410</div>
+                        </div>
+                    </div>
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">👥</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label">नोंदणीकृत लाभार्थी</span>
+                            <div class="stat-number">1.84 Cr</div>
+                        </div>
+                    </div>
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">🎫</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label">आजचे डिजिटल टोकन्स</span>
+                            <div class="stat-number">642,890</div>
+                        </div>
+                    </div>
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">🌾</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label">वितरित धान्य</span>
+                            <div class="stat-number">12,480 MT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =========================================================================
+             VIEW 2: DEDICATED CITIZEN LOGIN (PIN, Biometric, or Mobile SMS OTP)
+             ========================================================================= -->
+        <section id="view-login-citizen" class="app-view-container">
+            <div class="login-page-wrapper">
+                <button class="btn-back-home" data-i18n="backToHome">← मुख्य पृष्ठावर जा</button>
+                
+                <div class="login-card-container">
+                    <div class="login-top-icons">
+                        <img src="/images/my-logo.png" alt="Ration Store Logo" class="login-brand-logo-img" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                    </div>
+                    <h2 data-i18n="loginCitizenHeading">Login to ANNAMITRA</h2>
+                    <p class="login-subtitle" data-i18n="loginCitizenSub">See your ration, family & shop details</p>
+
+                    <!-- Authentication Method Switch Tabs (Password vs Fingerprint vs Mobile SMS OTP) -->
+                    <div class="auth-method-tabs">
+                        <button type="button" class="auth-tab-btn active" id="tab-auth-pin">
+                            🔑 Password
+                        </button>
+                        <button type="button" class="auth-tab-btn" id="tab-auth-fingerprint">
+                            👆 Biometric
+                        </button>
+                        <button type="button" class="auth-tab-btn" id="tab-auth-sms">
+                            📲 Phone OTP
+                        </button>
+                    </div>
+
+                    <!-- Method A: Standard PIN / Password Form -->
+                    <div id="auth-method-pin-wrap">
+                        <form id="form-citizen-login">
+                            <div class="login-form-group">
+                                <label for="login-citizen-card">
+                                    <span>📇</span> <span>Ration Card Number or Mobile</span>
+                                </label>
+                                <div class="login-input-wrap">
+                                    <input type="text" id="login-citizen-card" class="login-input-field" placeholder="e.g. MH-PDS-2026-0001 or 9822010001" required />
+                                </div>
+                            </div>
+
+                            <div class="login-form-group">
+                                <label for="login-citizen-pin">
+                                    <span>🔒</span> <span data-i18n="inputPassword">Password / PIN</span>
+                                </label>
+                                <div class="login-input-wrap">
+                                    <input type="password" id="login-citizen-pin" class="login-input-field" placeholder="••••••••" required />
+                                    <span class="password-toggle-eye" data-for="login-citizen-pin">👁️</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block btn-lg" data-i18n="loginBtn">
+                                ✅ Login with PIN
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Method B: Real WebAuthn Hardware Biometric Scanner -->
+                    <div id="auth-method-fingerprint-wrap" style="display: none;">
+                        <div class="login-form-group">
+                            <label for="login-citizen-card-bio">
+                                <span>📇</span> <span data-i18n="inputRationCardNo">Ration Card Number (Optional)</span>
+                            </label>
+                            <div class="login-input-wrap">
+                                <input type="text" id="login-citizen-card-bio" class="login-input-field" placeholder="e.g. MH-PDS-2026-0001" />
+                            </div>
+                        </div>
+
+                        <div class="biometric-scan-container">
+                            <p style="font-size: 0.875rem; color: #475569; margin-bottom: 8px;">
+                                मोबाईल किंवा लॅपटॉपच्या फिंगरप्रिंट सेन्सरला स्पर्श करा:
+                            </p>
+
+                            <!-- Interactive Sensor Pad -->
+                            <div class="biometric-scanner-pad" id="biometric-scanner-pad" title="Tap to trigger biometric scanner">
+                                <span class="fingerprint-large-icon">👆</span>
+                                <div class="scanner-laser-ray"></div>
+                            </div>
+
+                            <div class="biometric-status-text" id="biometric-status-label">
+                                <span>Touch sensor to authenticate via Aadhaar e-KYC</span>
+                            </div>
+
+                            <button type="button" class="btn btn-primary btn-block btn-lg" id="btn-biometric-scan-sensor">
+                                👆 Scan Fingerprint & Login
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Method C: Mobile Phone SMS OTP (Forgot Password Recovery) -->
+                    <div id="auth-method-sms-wrap" style="display: none;">
+                        <div class="login-form-group">
+                            <label for="login-citizen-mobile-card">
+                                <span>📱</span> <span>Ration Card # or Registered Mobile</span>
+                            </label>
+                            <div class="login-input-wrap" style="gap: 8px;">
+                                <input type="text" id="login-citizen-mobile-card" class="login-input-field" placeholder="e.g. MH-PDS-2026-0001 or 9822010001" />
+                                <button type="button" class="btn btn-outline" id="btn-send-sms-otp" style="white-space: nowrap; font-size: 0.85rem;">
+                                    📲 Send OTP
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="sms-otp-input-box-wrap" style="display: none;">
+                            <form id="form-citizen-sms-login">
+                                <div class="login-form-group">
+                                    <label for="login-citizen-sms-otp">
+                                        <span>🔑</span> <span>Enter 6-Digit SMS OTP</span>
+                                    </label>
+                                    <div class="login-input-wrap">
+                                        <input type="text" id="login-citizen-sms-otp" maxlength="6" class="login-input-field" placeholder="Enter 6-digit OTP" required />
+                                    </div>
+                                    <small style="color: #64748b; font-size: 0.78rem; display: block; margin-top: 4px;">
+                                        📩 SMS OTP sent to registered mobile phone
+                                    </small>
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-block btn-lg">
+                                    ✅ Verify Phone & Login
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="login-bottom-links">
+                        <div>
+                            <span class="forgot-password-link" id="link-forgot-password">
+                                🔐 पासवर्ड विसरलात? (Forgot Password / Mobile OTP)
+                            </span>
+                        </div>
+                        <span data-i18n="noAccountNotice">Don't have an account? Visit your local Fair Price Shop.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================================
+             VIEW 3: DEDICATED SHOPKEEPER LOGIN
+             ========================================================================= -->
+        <section id="view-login-shopkeeper" class="app-view-container">
+            <div class="login-page-wrapper">
+                <button class="btn-back-home" data-i18n="backToHome">← मुख्य पृष्ठावर जा</button>
+                
+                <div class="login-card-container">
+                    <div class="login-top-icons">
+                        <img src="/images/my-logo.png" alt="Ration Store Logo" class="login-brand-logo-img" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                    </div>
+                    <h2 data-i18n="loginShopkeeperHeading">Shopkeeper Terminal Login</h2>
+                    <p class="login-subtitle" data-i18n="loginShopkeeperSub">Access your Fair Price Shop counter system</p>
+
+                    <form id="form-shopkeeper-login">
+                        <div class="login-form-group">
+                            <label for="login-fps-id">
+                                <span>🏪</span> <span data-i18n="inputFpsId">Fair Price Shop ID</span>
+                            </label>
+                            <div class="login-input-wrap">
+                                <input type="text" id="login-fps-id" class="login-input-field" placeholder="e.g. FPS1001" required />
+                            </div>
+                        </div>
+
+                        <div class="login-form-group">
+                            <label for="login-fps-password">
+                                <span>🔒</span> <span data-i18n="inputPassword">Password</span>
+                            </label>
+                            <div class="login-input-wrap">
+                                <input type="password" id="login-fps-password" class="login-input-field" placeholder="Default: shop1234 or 1234" required />
+                                <span class="password-toggle-eye" data-for="login-fps-password">👁️</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block btn-lg" data-i18n="loginBtn">
+                            ✅ Login
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================================
+             PORTAL 1: AUTHENTICATED CITIZEN PORTAL (नागरिक पोर्टल)
+             ========================================================================= -->
+        <section id="portal-citizen" class="app-view-container">
+            <div class="citizen-dashboard-grid">
+                <div style="margin-bottom: 8px;">
+                    <button class="btn-back-home btn-portal-back-home" style="margin-bottom:0;">← मुख्य पृष्ठावर जा (Back to Home)</button>
+                </div>
+                
+                <!-- Citizen Profile & Assigned FPS Banner -->
+                <div class="citizen-profile-banner">
+                    <div class="profile-main-meta">
+                        <div class="citizen-avatar-large">👨‍🌾</div>
+                        <div class="profile-text">
+                            <h2 id="citizen-head-name">Santoshrao Gaikwad</h2>
+                            <div class="profile-card-tags">
+                                <span class="ration-card-number-tag" id="citizen-card-no">MH-PDS-2026-0001</span>
+                                <span class="badge badge-yellow" id="citizen-card-category">Antyodaya Anna Yojana</span>
+                                <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff;" id="citizen-district-tag">Maharashtra</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-fps-assigned">
+                        <span class="fps-label-small" data-i18n="assignedFps">आपले अधिकृत रेशन दुकान:</span>
+                        <div class="fps-name-text" id="citizen-assigned-shop">Shree Gajanan Maharaj Sahakari FPS (FPS1001)</div>
+                    </div>
+                </div>
+
+                <!-- Transparency: Live Shop Stock Preview -->
+                <div id="citizen-shop-stock-preview"></div>
+
+                <!-- Active Digital Token Card (When booked) -->
+                <div id="active-token-section"></div>
+
+                <!-- Monthly Entitlement / Quota Section -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="myMonthlyQuota">ऑगस्ट २०२६ चे तुमचे हक्काचे धान्य</h2>
+                            <p data-i18n="quotaSubtitle">खालील सर्व धान्य तुमच्या कुटुंबासाठी मंजूर झालेले आहे. कोणालाही जादा पैसे देऊ नका!</p>
+                        </div>
+                        <div>
+                            <span class="status-pill status-available" id="quota-status-badge">🟢 उपलब्ध</span>
+                        </div>
+                    </div>
+
+                    <!-- Quota Items Grid (Visual Grain Cards) -->
+                    <div class="quota-items-grid" id="quota-items-grid"></div>
+
+                    <!-- Total Payable Footer -->
+                    <div class="quota-footer-bar">
+                        <div class="quota-total-display">
+                            <span data-i18n="totalPayable">एकूण देय रक्कम:</span>
+                            <strong id="quota-total-amount">₹40</strong>
+                        </div>
+                        <div style="font-size: 0.8125rem; color: #64748b;">
+                            🛡️ सर्व दर महाराष्ट्र शासनाने निश्चित केलेले आहेत.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 Daytime Slots Booking Section (10AM-12PM, 12PM-2PM, 4PM-8PM) -->
+                <div class="section-card" id="slot-booking-section">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="bookSlotTitle">रेशन आणण्यासाठी वेळ (टोकन) निवडा</h2>
+                            <p data-i18n="bookSlotDesc">रांगेत उभे राहण्याची गरज नाही! खालील ३ वेळेपैकी सोयीची वेळ निवडून हिरवे बटण दाबा.</p>
+                        </div>
+                    </div>
+
+                    <!-- 3 Slots Grid -->
+                    <div class="slots-grid" id="slots-grid"></div>
+                </div>
+
+                <!-- Anti-Corruption 1-Click SOS Banner -->
+                <div class="sos-banner-card">
+                    <div class="sos-content-info">
+                        <h3 data-i18n="sosTitle">🚨 दुकानदाराने रेशन देण्यास नकार दिला का?</h3>
+                        <p data-i18n="sosDesc">जर दुकानदार म्हणाला "माल संपला आहे" किंवा जादा पैसे मागितले, तर तात्काळ हे लाल बटण दाबा! अन्न निरीक्षक थेट दखल घेतील.</p>
+                    </div>
+                    <button class="btn-sos-trigger" id="btn-trigger-sos" data-i18n="sosBtn">
+                        🚨 रेशन नाकारले? तक्रार नोंदवा
+                    </button>
+                </div>
+
+                <!-- Family Members -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="familyTitle">रेशन कार्डातील कुटुंब सदस्य</h2>
+                        </div>
+                    </div>
+                    <div class="family-members-grid" id="family-members-grid"></div>
+                </div>
+
+                <!-- Digital Passbook (Past Claims) -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="passbookTitle">डिजिटल रेशन पासबुक (मागील पावत्या)</h2>
+                            <p data-i18n="passbookDesc">गेल्या काही महिन्यात तुम्ही घेतलेल्या धान्याची संपूर्ण पारदर्शक नोंद.</p>
+                        </div>
+                    </div>
+                    <div class="passbook-history-list" id="passbook-history-list"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========================================================================
+             PORTAL 2: AUTHENTICATED SHOPKEEPER PORTAL (दुकानदार पोर्टल)
+             ========================================================================= -->
+        <section id="portal-shopkeeper" class="app-view-container">
+            <div class="shopkeeper-dashboard-grid">
+                <div style="margin-bottom: 8px;">
+                    <button class="btn-back-home btn-portal-back-home" style="margin-bottom:0;">← मुख्य पृष्ठावर जा (Back to Home)</button>
+                </div>
+                
+                <!-- FPS Header Banner -->
+                <div class="fps-header-card">
+                    <div class="fps-title-meta">
+                        <div class="fps-shop-icon">🏪</div>
+                        <div class="fps-details-block">
+                            <h2 id="fps-shop-title">Shree Gajanan Maharaj Sahakari FPS</h2>
+                            <p>Dealer: <strong id="fps-dealer-title">Chandrakant Kadam (चंद्रकांत कदम)</strong> | FPS ID: <span id="fps-id-badge">#FPS1001</span></p>
+                        </div>
+                    </div>
+
+                    <div class="fps-serving-counter-widget">
+                        <span>NOW SERVING TOKEN</span>
+                        <strong id="fps-serving-token">#14</strong>
+                        <button class="btn btn-sm btn-outline" id="btn-fps-next-token" style="background:#fff; color:#0b2545;">
+                            Next Token ⏩
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Beneficiary Search & Dispensing Terminal -->
+                <div class="fps-search-terminal-box">
+                    <h3 data-i18n="scannerTitle">नागरिक टोकन व OTP पडताळणी काउंटर</h3>
+                    
+                    <div class="search-input-group">
+                        <input type="text" id="fps-search-input" class="search-input-lg" placeholder="Enter Ration Card (e.g. MH-PDS-2026-0001), Token No, or Mobile" />
+                        <button class="btn btn-primary btn-lg" id="btn-fps-search" data-i18n="searchBeneficiary">
+                            तपासा 🔍
+                        </button>
+                    </div>
+
+                    <!-- Search Result Container -->
+                    <div id="fps-search-result-wrap"></div>
+                </div>
+
+                <!-- MODULE 1: ADD NEW FAMILY MEMBER -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="addNewMemberTitle">नवीन कुटुंब सदस्य जोडा (रेशन कार्ड अपडेट)</h2>
+                            <p data-i18n="addNewMemberDesc">नवीन जन्मलेले बाळ किंवा लग्न होऊन आलेल्या सदस्याचे नाव रेशन कार्डात जोडा:</p>
+                        </div>
+                    </div>
+
+                    <div class="search-input-group">
+                        <input type="text" id="input-member-card-search" class="search-input-lg" placeholder="Enter Ration Card Number (e.g. MH-PDS-2026-0001)" />
+                        <button class="btn btn-primary" id="btn-search-card-for-member">Search Card 🔍</button>
+                    </div>
+
+                    <div id="add-member-citizen-preview"></div>
+
+                    <div id="add-member-form-wrap" style="display: none; margin-top: 20px;">
+                        <form id="form-add-family-member">
+                            <div class="add-member-form-grid">
+                                <div class="form-group">
+                                    <label data-i18n="inputMemberName">सदस्याचे पूर्ण नाव</label>
+                                    <input type="text" id="new-member-name" class="form-control" placeholder="e.g. Aniket Tukaram Jadhav" required />
+                                </div>
+                                <div class="form-group">
+                                    <label data-i18n="inputMemberRelation">नाते</label>
+                                    <select id="new-member-relation" class="form-control">
+                                        <option value="Son">Son (मुलगा)</option>
+                                        <option value="Daughter">Daughter (मुलगी)</option>
+                                        <option value="Wife">Wife (पत्नी)</option>
+                                        <option value="Daughter-in-law">Daughter-in-law (सून)</option>
+                                        <option value="Mother">Mother (आई)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label data-i18n="inputMemberAge">वय (वर्षे)</label>
+                                    <input type="number" id="new-member-age" class="form-control" placeholder="e.g. 3" min="0" max="110" required />
+                                </div>
+                                <div class="form-group">
+                                    <label data-i18n="inputMemberGender">लिंग</label>
+                                    <select id="new-member-gender" class="form-control">
+                                        <option value="Male">Male (पुरुष)</option>
+                                        <option value="Female">Female (स्त्री)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label data-i18n="inputMemberAadhaar">१२-अंकी आधार क्रमांक</label>
+                                    <input type="text" id="new-member-aadhaar" class="form-control" maxlength="12" placeholder="e.g. 562145891234" />
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-lg" data-i18n="saveNewMemberBtn">
+                                सदस्य जोडा व कोटा अपडेट करा ➕
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- MODULE 2: DECEASED / EXPIRED MEMBER REMOVAL REQUEST (GOV WORKFLOW) -->
+                <div class="section-card" style="border-left: 5px solid #dc2626;">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2>🗑️ मयत / स्थलांतरित सदस्य वगळण्याची विनंती (शासकीय मंजुरी)</h2>
+                            <p>रेशन कार्डातील व्यक्ती मयत झाल्यास किंवा लग्न होऊन गेल्यास नाव वगळण्याची अधिकृत विनंती शासनाला पाठवा:</p>
+                        </div>
+                    </div>
+
+                    <div class="search-input-group">
+                        <input type="text" id="input-delete-member-card" class="search-input-lg" placeholder="Enter Ration Card Number (e.g. MH-PDS-2026-0001)" />
+                        <button class="btn btn-danger" id="btn-search-card-for-delete">Search Card 🔍</button>
+                    </div>
+
+                    <div id="delete-member-citizen-preview"></div>
+
+                    <div id="delete-member-form-wrap" style="display: none; margin-top: 20px;">
+                        <form id="form-request-delete-member">
+                            <div class="add-member-form-grid">
+                                <div class="form-group">
+                                    <label>वगळावयाचा सदस्य निवडा (Select Member)</label>
+                                    <select id="delete-member-select" class="form-control" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>कारण (Reason)</label>
+                                    <select id="delete-member-reason" class="form-control">
+                                        <option value="EXPIRED_DECEASED">सदस्य मयत झाला (Deceased / Expired)</option>
+                                        <option value="MARRIED_MIGRATED">लग्न होऊन स्थलांतरित (Married & Migrated)</option>
+                                        <option value="DUPLICATE_ENTRY">दुबार नोंदणी (Duplicate Entry)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>मृत्यू दाखला / स्थलांतर दाखला क्र.</label>
+                                    <input type="text" id="delete-member-cert-no" class="form-control" placeholder="उदा. DTH-2026-7841" required />
+                                </div>
+                                <div class="form-group" style="grid-column: 1 / -1;">
+                                    <label>दुकानदाराची नोंद (Shopkeeper Notes)</label>
+                                    <input type="text" id="delete-member-notes" class="form-control" placeholder="उदा. ग्रामपंचायतीचा अधिकृत दाखला पडताळला आहे..." />
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                🏛️ नाव वगळण्यासाठी शासनाकडे विनंती पाठवा
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- MODULE 3: ON-DEMAND BENEFICIARY DIRECTORY & RECORDS -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2>📋 नोंदणीकृत लाभार्थी शोध व यादी (Beneficiary Records)</h2>
+                            <p>दुकानाशी जोडलेली लाभार्थी कुटुंबे शोधण्यासाठी खालील बटण दाबा:</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" id="btn-toggle-master-directory">
+                                📂 संपूर्ण ५०० लाभार्थी यादी पहा (Open Master Directory)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="master-directory-table-container" style="display: none; margin-top: 16px;">
+                        <div style="margin-bottom: 14px;">
+                            <input type="text" id="input-directory-filter-search" class="form-control" placeholder="यादीत शोधा (उदा. MH-PDS-2026-0015 किंवा Tukaram किंवा 9822010001)..." />
+                        </div>
+
+                        <div class="dir-filter-tabs">
+                            <button type="button" class="btn-dir-filter-cat active" data-cat="ALL">सर्व (All 500)</button>
+                            <button type="button" class="btn-dir-filter-cat" data-cat="AAY">पिवळे कार्ड (AAY)</button>
+                            <button type="button" class="btn-dir-filter-cat" data-cat="PHH">केशरी कार्ड (PHH)</button>
+                        </div>
+
+                        <div class="master-directory-table-wrap">
+                            <table class="grain-table">
+                                <thead>
+                                    <tr>
+                                        <th>Ration Card #</th>
+                                        <th>Head of Family</th>
+                                        <th>Category</th>
+                                        <th>Members</th>
+                                        <th>Monthly Quota</th>
+                                        <th>Quota Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="master-directory-tbody"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="dir-pagination-bar">
+                            <span id="master-directory-count">500 Families Listed</span>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button type="button" class="btn btn-sm btn-outline" id="btn-dir-prev-page">◀ Prev</button>
+                                <span id="master-directory-page-label" style="font-weight: 700;">Page 1 of 34</span>
+                                <button type="button" class="btn btn-sm btn-outline" id="btn-dir-next-page">Next ▶</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Immutable Stock Ledger -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="shopLedgerTitle">अधिकृत शासकीय साठा नोंदवही (स्वयंचलित)</h2>
+                            <p data-i18n="shopLedgerNotice">टीप: हा साठा गोदामातून आलेल्या चलनानुसार स्वयंचलित मोजला जातो. दुकानदारास स्वतः बदल करण्याची मुभा नाही.</p>
+                        </div>
+                    </div>
+
+                    <div class="ledger-notice-box">
+                        <span>🔒 <strong>Anti-Corruption Policy Active:</strong> Stock decreases strictly via verified Citizen OTP releases. Manual inventory modifications are locked.</span>
+                    </div>
+
+                    <div class="fps-stock-ledger-grid" id="fps-stock-ledger-grid"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========================================================================
+             PORTAL 3: DIRECT ACCESS GOVERNMENT COMMAND CENTER (प्रशासकीय नियंत्रण कक्ष)
+             ========================================================================= -->
+        <section id="portal-admin" class="app-view-container">
+            <div class="admin-dashboard-grid">
+                
+                <!-- Command Center Header -->
+                <div class="admin-command-header">
+                    <div class="admin-header-title">
+                        <h2 data-i18n="adminTitle">राज्य अन्न व नागरी पुरवठा नियंत्रण कक्ष</h2>
+                        <p data-i18n="adminSubtitle">थेट रियल-टाइम मॉनिटरिंग, AI संशयित व्यवहार शोध व दुकानदार विनंत्या मंजुरी डेस्क</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn btn-sm btn-outline btn-portal-back-home" style="background:#fff; color:#0b2545; font-weight:700; padding:8px 14px; border:1.5px solid #fff;">
+                            🏠 मुख्य पृष्ठावर जा (Back to Home)
+                        </button>
+                        <div class="admin-live-pulse-badge">
+                            <span class="pulse-dot" style="background:#34d399;"></span>
+                            <span>OFFICIAL COMMAND DESK ACTIVE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High-level Telemetry Statistics Grid -->
+                <div class="admin-stats-grid">
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">🏪</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label" data-i18n="statTotalFps">एकूण सक्रिय दुकाने</span>
+                            <div class="stat-number" id="admin-stat-fps">52,410</div>
+                        </div>
+                    </div>
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">👥</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label" data-i18n="statBeneficiaries">नोंदणीकृत लाभार्थी कुटुंब</span>
+                            <div class="stat-number" id="admin-stat-beneficiaries">1.84 Cr</div>
+                        </div>
+                    </div>
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">🎫</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label">आजचे डिजिटल टोकन्स</span>
+                            <div class="stat-number" id="admin-stat-tokens">642,890</div>
+                        </div>
+                    </div>
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">🌾</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label" data-i18n="statDistributedMT">वितरित धान्य (मेट्रिक टन)</span>
+                            <div class="stat-number" id="admin-stat-mt">12,480.5 MT</div>
+                        </div>
+                    </div>
+                    <div class="stat-metric-card">
+                        <div class="stat-icon-wrap">🚨</div>
+                        <div class="stat-text-wrap">
+                            <span class="stat-label" data-i18n="statActiveGrievances">सक्रिय नागरिक तक्रारी</span>
+                            <div class="stat-number text-danger" id="admin-stat-grievances">2</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GOVT APPROVAL DESK: PENDING SHOPKEEPER REQUESTS -->
+                <div class="section-card" style="border-left: 5px solid #0284c7;">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2>🏛️ दुकानदार विनंत्या मंजुरी डेस्क (Pending Citizen Deletions / Modifications)</h2>
+                            <p>दुकानदारांनी पाठवलेल्या मयत किंवा स्थलांतरित व्यक्तींची नावे वगळण्याच्या विनंत्या तपासा व मंजूर करा:</p>
+                        </div>
+                    </div>
+
+                    <div id="admin-pending-requests-queue"></div>
+                </div>
+
+                <!-- AI Fraud Detection Radar & Live Supply Pipeline -->
+                <div class="admin-split-grid">
+                    <!-- AI Anomaly Radar -->
+                    <div class="ai-radar-card">
+                        <div class="ai-radar-header">
+                            <h3 data-i18n="aiFraudDetection">🤖 AI गैरप्रकार व अनियमितता रडार</h3>
+                            <span class="ai-status-tag">Real-Time Engine</span>
+                        </div>
+                        <div class="ai-anomalies-feed" id="admin-ai-anomalies-feed"></div>
+                    </div>
+
+                    <!-- Live Supply Chain Pipeline Tracker -->
+                    <div class="ai-radar-card">
+                        <div class="ai-radar-header">
+                            <h3>🚚 Grain Flow & Logistics Telemetry</h3>
+                            <span class="status-pill status-success">FCI ➔ FPS Live</span>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span>🏛️ Central Godown (FCI Manmad)</span>
+                                <strong>100% Dispatched</strong>
+                            </div>
+                            <div class="stock-progress-bar-wrap" style="height: 10px; margin-bottom: 16px;">
+                                <div class="stock-progress-bar" style="width: 100%;"></div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span>🚚 GPS En-Route Consignments (4,210 Trucks)</span>
+                                <strong>98.4% Delivered to FPS</strong>
+                            </div>
+                            <div class="stock-progress-bar-wrap" style="height: 10px; margin-bottom: 16px;">
+                                <div class="stock-progress-bar" style="width: 98%;"></div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span>🏪 Fair Price Shops Distribution to Citizens</span>
+                                <strong>67.5% Picked Up (Tokens Active)</strong>
+                            </div>
+                            <div class="stock-progress-bar-wrap" style="height: 10px; margin-bottom: 16px;">
+                                <div class="stock-progress-bar" style="width: 67.5%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Citizen SOS Grievance Desk -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="grievanceDesk">नागरिक SOS आपातकालीन निवारण डेस्क</h2>
+                            <p>Direct priority feed of citizen complaints regarding refused stock, overcharging, and shop closures.</p>
+                        </div>
+                    </div>
+
+                    <div class="admin-grievances-queue" id="admin-grievances-queue"></div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-top-row">
+                <div class="footer-brand-info">
+                    <h4>अन्नमित्र (AnnaMitra SmartPDS)</h4>
+                    <p>Department of Food, Civil Supplies & Consumer Protection, Government of Maharashtra</p>
+                </div>
+                <div style="font-size: 0.875rem; color: #cbd5e1;">
+                    <span>📞 National Toll-Free: <strong>1967 / 1800-22-4950</strong></span>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom-row">
+                <span>© 2026 Government of Maharashtra. All rights reserved.</span>
+                <span>Designed for Zero-Corruption, Absolute Transparency & Rural Accessibility.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =========================================================================
+         MODALS
+         ========================================================================= -->
+
+    <!-- Modal 1: Citizen SOS Emergency Complaint -->
+    <div class="modal-overlay" id="sos-complaint-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 data-i18n="sosModalTitle">🚨 तातडीची तक्रार (अन्न निरीक्षक थेट दखल)</h3>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="sos-form">
+                    <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 14px;">
+                        Select the issue you faced at the ration shop. A priority inspection order will be generated.
+                    </p>
+
+                    <div class="sos-reasons-group">
+                        <label class="radio-card-label">
+                            <input type="radio" name="sos-reason" value="DENIED_RATION" checked />
+                            <span data-i18n="sosReason1">दुकानदाराने माल संपल्याचे खोटे सांगितले</span>
+                        </label>
+                        <label class="radio-card-label">
+                            <input type="radio" name="sos-reason" value="OVERCHARGING" />
+                            <span data-i18n="sosReason2">शासकीय दरापेक्षा जादा पैसे मागितले</span>
+                        </label>
+                        <label class="radio-card-label">
+                            <input type="radio" name="sos-reason" value="UNDERWEIGHING" />
+                            <span data-i18n="sosReason3">वजन कमी दिले / निकृष्ट धान्य दिले</span>
+                        </label>
+                        <label class="radio-card-label">
+                            <input type="radio" name="sos-reason" value="SHOP_CLOSED" />
+                            <span data-i18n="sosReason4">दुकान वेळेत उघडे नव्हते</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sos-notes">Additional Details (Optional):</label>
+                        <textarea id="sos-notes" class="form-control" rows="3" placeholder="उदा. दुकानदाराने उद्धटपणे बोलून रेशन देण्यास नकार दिला..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger btn-block btn-lg" data-i18n="sosSubmitBtn">
+                        तातडीने कारवाईची मागणी करा 🚨
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Digital Receipt Print Sheet -->
+    <div class="modal-overlay" id="receipt-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Digital PDS Electronic Receipt</h3>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="receipt-modal-body"></div>
+            <div style="padding: 16px 24px; border-top: 1px solid var(--border-light); display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Print Receipt</button>
+                <button class="btn btn-outline modal-close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/citizen.js"></script>
+    <script src="js/shopkeeper.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

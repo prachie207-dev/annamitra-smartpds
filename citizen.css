@@ -1,0 +1,804 @@
+/**
+ * Annasetu (अन्नसेतू) - Citizen Portal Styles
+ * Focused on visual clarity, tactile food grain cards, 3 daytime slots,
+ * High-Visibility OTP pass, and 1-Click Anti-Corruption SOS triggers.
+ */
+
+.citizen-dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ==========================================================================
+   Citizen Profile & FPS Location Header
+   ========================================================================== */
+.citizen-profile-banner {
+    background: linear-gradient(135deg, #0b2545 0%, #134074 100%);
+    color: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-main-meta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.citizen-avatar-large {
+    font-size: 3rem;
+    background: rgba(255, 255, 255, 0.15);
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.profile-text h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.profile-card-tags {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.ration-card-number-tag {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-family: monospace;
+    letter-spacing: 0.05em;
+}
+
+.profile-fps-assigned {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    text-align: right;
+}
+
+.fps-label-small {
+    font-size: 0.75rem;
+    color: #93c5fd;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    display: block;
+}
+
+.fps-name-text {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #ffffff;
+}
+
+.demo-citizen-picker-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 0.8125rem;
+    color: #cbd5e1;
+}
+
+.demo-citizen-picker-wrap select {
+    background: #07172b;
+    color: #ffffff;
+    border: 1px solid #334155;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+}
+
+/* ==========================================================================
+   Shop Stock Verification Banner (Transparency Feature)
+   ========================================================================== */
+.shop-stock-banner {
+    background-color: var(--bg-surface);
+    border-left: 5px solid var(--emerald-green);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.shop-banner-info h4 {
+    color: var(--primary-navy);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.shop-banner-info p {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.shop-stock-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.stock-pill {
+    background: #f1f5f9;
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+}
+
+.stock-pill strong {
+    color: var(--emerald-green);
+}
+
+/* ==========================================================================
+   Visual Food Quota Cards
+   ========================================================================== */
+.section-card {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+}
+
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.section-title-wrap h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--primary-navy);
+}
+
+.section-title-wrap p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.quota-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.quota-card {
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1.5px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quota-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+}
+
+.grain-rice {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.grain-wheat {
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.grain-sugar {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+.grain-oil {
+    background: #fefce8;
+    border-color: #fef08a;
+}
+
+.grain-icon-wrap {
+    font-size: 2.8rem;
+    line-height: 1;
+}
+
+.grain-details {
+    flex: 1;
+}
+
+.grain-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--primary-navy);
+}
+
+.grain-quantity {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--emerald-green);
+    line-height: 1.2;
+    margin: 2px 0 6px;
+}
+
+.grain-price-tag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+    padding-top: 4px;
+}
+
+.grain-subtotal {
+    color: var(--primary-navy);
+}
+
+.quota-footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 14px 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.quota-total-display {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+}
+
+.quota-total-display strong {
+    font-size: 1.5rem;
+    color: var(--emerald-green);
+    margin-left: 6px;
+}
+
+/* ==========================================================================
+   3 Daytime Slots Booking Section
+   ========================================================================== */
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.slot-card {
+    background: #ffffff;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    transition: all 0.25s ease;
+}
+
+.slot-card:hover {
+    border-color: var(--emerald-green);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+}
+
+.slot-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.slot-icon {
+    font-size: 2.2rem;
+    background: #f1f5f9;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+}
+
+.slot-time-info h4 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--primary-navy);
+}
+
+.slot-sub {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.slot-availability {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.spot-good {
+    background-color: #ecfdf5;
+    color: #065f46;
+}
+
+.spot-urgent {
+    background-color: #fff7ed;
+    color: #c2410c;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background-color: currentColor;
+    display: inline-block;
+    animation: pulseAnimation 1.5s infinite;
+}
+
+@keyframes pulseAnimation {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* ==========================================================================
+   Active Token Pass Card (High-Contrast, QR, 4-digit OTP)
+   ========================================================================== */
+.token-pass-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border: 2.5px solid var(--emerald-green);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    box-shadow: var(--shadow-elevated);
+    position: relative;
+    overflow: hidden;
+}
+
+.token-pass-ribbon {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+}
+
+.token-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed var(--border-medium);
+    padding-bottom: 18px;
+}
+
+.token-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.token-display-number {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--primary-navy);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-top: 4px;
+}
+
+.token-qr-wrap {
+    background: #ffffff;
+    padding: 6px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--border-light);
+}
+
+.token-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.token-info-item {
+    background: #ffffff;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.token-sub-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: block;
+    font-weight: 600;
+}
+
+.token-info-item strong {
+    font-size: 1rem;
+    color: var(--primary-navy);
+    font-weight: 700;
+}
+
+/* 4-Digit High-Visibility Secure OTP Box */
+.secure-otp-container {
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 18px 22px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+}
+
+.otp-heading {
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.otp-digits-box {
+    display: inline-flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.otp-box-digit {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid #34d399;
+    color: #34d399;
+    font-size: 2.2rem;
+    font-weight: 900;
+    width: 52px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    letter-spacing: normal;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.otp-warning-note {
+    font-size: 0.8125rem;
+    color: #fcd34d;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* Live Queue Radar */
+.live-queue-radar {
+    background: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.queue-radar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.radar-live-badge {
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+}
+
+.queue-wait-estimate {
+    font-size: 0.875rem;
+    color: #1e40af;
+}
+
+.token-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Anti-Corruption 1-Click SOS Banner
+   ========================================================================== */
+.sos-banner-card {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 2px dashed #f87171;
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.sos-content-info {
+    max-width: 650px;
+}
+
+.sos-content-info h3 {
+    color: #991b1b;
+    font-size: 1.2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sos-content-info p {
+    font-size: 0.875rem;
+    color: #7f1d1d;
+    margin-top: 4px;
+}
+
+.btn-sos-trigger {
+    background: #dc2626;
+    color: #ffffff;
+    padding: 14px 24px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+    animation: emergencyPulse 2s infinite;
+}
+
+@keyframes emergencyPulse {
+    0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+    70% { box-shadow: 0 0 0 14px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+/* ==========================================================================
+   Family Details & Digital Passbook
+   ========================================================================== */
+.family-members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.family-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.family-avatar {
+    font-size: 2.2rem;
+}
+
+.family-details h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary-navy);
+}
+
+.family-details p {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+.aadhaar-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 4px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+}
+
+.aadhaar-verified {
+    background: #ecfdf5;
+    color: #065f46;
+}
+
+.aadhaar-pending {
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+/* Passbook History */
+.passbook-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.passbook-item-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    transition: transform 0.2s ease;
+}
+
+.passbook-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-subtle);
+}
+
+.passbook-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+}
+
+.passbook-month {
+    font-weight: 800;
+    color: var(--primary-navy);
+    font-size: 1.05rem;
+}
+
+.passbook-datetime {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.passbook-receipt-badge {
+    font-size: 0.8125rem;
+    font-family: monospace;
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+}
+
+.passbook-items-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.passbook-grain-row {
+    background: #f8fafc;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.passbook-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    border-top: 1px dashed var(--border-light);
+    padding-top: 8px;
+}
+
+.passbook-total-paid strong {
+    font-size: 1rem;
+    color: var(--emerald-green);
+}
+
+/* ==========================================================================
+   SOS Grievance Modal Form
+   ========================================================================== */
+.sos-reasons-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.radio-card-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.radio-card-label:hover {
+    background-color: #f8fafc;
+    border-color: var(--primary-navy-light);
+}
+
+.radio-card-label input[type="radio"]:checked + span {
+    color: #991b1b;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.form-control:focus {
+    border-color: var(--primary-navy);
+    outline: none;
+}

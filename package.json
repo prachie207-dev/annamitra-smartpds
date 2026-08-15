@@ -1,0 +1,20 @@
+{
+  "name": "annamitra-smartpds",
+  "version": "1.0.0",
+  "description": "AnnaMitra Smart Public Distribution System (SmartPDS)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "seed": "node seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "sqlite3": "^6.0.1"
+  }
+}
