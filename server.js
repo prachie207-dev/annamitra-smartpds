@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files and index.html correctly from the parent root folder
-const rootPath = path.join(__dirname, '..');
+const rootPath = path.join(__dirname);
 app.use(express.static(rootPath));
 
 app.get('/', (req, res) => {
