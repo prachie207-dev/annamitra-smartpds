@@ -18,9 +18,13 @@ const otpStore = new Map();
 app.use(cors());
 app.use(express.json());
 
-const rootPath = path.join(__dirname, '..');
+// Serve static files and index.html from the current directory root
+const rootPath = path.join(__dirname);
 app.use(express.static(rootPath));
-app.use('/css', express.static(path.join(rootPath, 'css')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(rootPath, 'index.html'));
+});
 app.use('/js', express.static(path.join(rootPath, 'js')));
 app.use('/images', express.static(path.join(rootPath, 'images')));
 app.get('/', (req, res) => {
