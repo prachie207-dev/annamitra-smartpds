@@ -18,8 +18,8 @@ const otpStore = new Map();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files and index.html correctly from the parent root folder
-const rootPath = path.join(__dirname);
+// Correctly point to the parent project root folder where index.html lives
+const rootPath = path.join(__dirname, '..');
 app.use(express.static(rootPath));
 
 app.get('/', (req, res) => {
