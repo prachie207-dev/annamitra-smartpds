@@ -18,14 +18,12 @@ const otpStore = new Map();
 app.use(cors());
 app.use(express.json());
 
-// Serve static frontend files and images (supports nested and root directories)
-app.use(express.static(path.join(__dirname, '..')));
-app.use(express.static(__dirname));
-app.use(express.static(process.cwd()));
-app.use('/images', express.static(path.join(__dirname, '..', 'images')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/images', express.static(path.join(process.cwd(), 'images')));
-app.use('/images', express.static(process.cwd()));
+// Serve static frontend files and images from the root project folder
+app.use(express.static(path.join(__dirname, '../')));
+app.use('/css', express.static(path.join(__dirname, '../css')));
+app.use('/js', express.static(path.join(__dirname, '../js')));
+app.use('/images', express.static(path.join(__dirname, '../images')));
+
 // Serve index.html on the main home route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../index.html'));
