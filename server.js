@@ -618,7 +618,14 @@ app.post('/api/admin/resolve-grievance', (req, res) => {
     return res.json({ success: true, message: 'Grievance resolved successfully.' });
 });
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`🌾 AnnaMitra SmartPDS REST API Server is running at http://localhost:${PORT}`);
-});
+// Start Server / Vercel Export Fix
+const PORT = process.env.PORT || 3000;
+
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`🌾 AnnaMitra SmartPDS REST API Server is running at http://localhost:${PORT}`);
+    });
+}
+
+// Export app for Vercel serverless functions
+module.exports = app;
