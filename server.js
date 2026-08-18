@@ -11,6 +11,8 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Add this line so Vercel can serve your HTML/CSS files:
+app.use(express.static(__dirname));
 // In-Memory Temporary SMS OTP Store (Key: CardNumber or Mobile -> { otp, expiresAt, citizen })
 const otpStore = new Map();
 
