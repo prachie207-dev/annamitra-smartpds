@@ -1,53 +1,162 @@
 /**
- * Annasetu (अन्नसेतू) - SmartPDS Data Layer
- * State Management and 200+ Citizen Database
+ * AnnaMitra (अन्नमित्र) - SmartPDS Data Layer
+ * State Management and 500+ Citizen Database with LocalStorage synchronization
  */
 
-const STORAGE_KEY = 'ANNASETU_PDS_STATE_V3';
+const STORAGE_KEY = 'ANNASETU_PDS_STATE_V5';
 
-// Generator for 200 realistic Indian families
-function generate200Families() {
+function generate500Families() {
     const firstNames = [
-        { en: 'Tukaram', mr: 'तुकाराम', hi: 'तुकाराम', g: 'Male' },
         { en: 'Laxmibai', mr: 'लक्ष्मीबाई', hi: 'लक्ष्मीबाई', g: 'Female' },
-        { en: 'Sambhaji', mr: 'संभाजी', hi: 'संभाजी', g: 'Male' },
+        { en: 'Tukaram', mr: 'तुकाराम', hi: 'तुकाराम', g: 'Male' },
+        { en: 'Santoshrao', mr: 'संतोषराव', hi: 'संतोषराव', g: 'Male' },
         { en: 'Sunita', mr: 'सुनिता', hi: 'सुनिता', g: 'Female' },
+        { en: 'Sambhaji', mr: 'संभाजी', hi: 'संभाजी', g: 'Male' },
         { en: 'Dattatray', mr: 'दत्तात्रय', hi: 'दत्तात्रय', g: 'Male' },
         { en: 'Anusaya', mr: 'अनुसया', hi: 'अनुसया', g: 'Female' },
         { en: 'Pandurang', mr: 'पांडुरंग', hi: 'पांडुरंग', g: 'Male' },
         { en: 'Shantabai', mr: 'शांताबाई', hi: 'शांताबाई', g: 'Female' },
         { en: 'Eknath', mr: 'एकनाथ', hi: 'एकनाथ', g: 'Male' },
-        { en: 'Kavita', mr: 'कविता', hi: 'कविता', g: 'Female' },
-        { en: 'Babanrao', mr: 'बबनराव', hi: 'बबनराव', g: 'Male' },
-        { en: 'Parvatibai', mr: 'पार्वतीबाई', hi: 'पार्वतीबाई', g: 'Female' },
-        { en: 'Ganesh', mr: 'गणेश', hi: 'गणेश', g: 'Male' },
-        { en: 'Rukmini', mr: 'रुक्मिणी', hi: 'रुक्मिणी', g: 'Female' },
-        { en: 'Maruti', mr: 'मारुती', hi: 'मारुती', g: 'Male' },
-        { en: 'Kashibai', mr: 'काशीबाई', hi: 'काशीबाई', g: 'Female' },
-        { en: 'Vishnu', mr: 'विष्णू', hi: 'विष्णू', g: 'Male' },
-        { en: 'Mandakini', mr: 'मंदाकिनी', hi: 'मंदाकिनी', g: 'Female' },
-        { en: 'Mahadev', mr: 'महादेव', hi: 'महादेव', g: 'Male' },
-        { en: 'Sushila', mr: 'सुशीला', hi: 'सुशीला', g: 'Female' },
-        { en: 'Ramesh', mr: 'रमेश', hi: 'रमेश', g: 'Male' },
-        { en: 'Pooja', mr: 'पूजा', hi: 'पूजा', g: 'Female' },
-        { en: 'Santosh', mr: 'संतोष', hi: 'संतोष', g: 'Male' },
-        { en: 'Surekha', mr: 'सुरेखा', hi: 'सुरेखा', g: 'Female' },
-        { en: 'Ashok', mr: 'अशोक', hi: 'अशोक', g: 'Male' }
+        { en: 'Kavita', mr: 'कविता', hi: 'कविता', g: 'Female' }
     ];
 
     const lastNames = [
-        'Jadhav (जाधव)', 'Patil (पाटील)', 'Gaikwad (गायकवाड)', 'Shinde (शिंदे)', 
+        'Gaikwad (गायकवाड)', 'Jadhav (जाधव)', 'Patil (पाटील)', 'Shinde (शिंदे)', 
         'Pawar (पवार)', 'Kadam (कदम)', 'Chavan (चव्हाण)', 'More (मोरे)', 
-        'Deshmukh (देशमुख)', 'Bhosale (भोसले)', 'Koli (कोळी)', 'Sawant (सावंत)',
-        'Salunkhe (साळुंखे)', 'Ghuge (घुगे)', 'Mane (माने)', 'Suryavanshi (सूर्यवंशी)',
-        'Raut (राऊत)', 'Gholap (घोळप)', 'Kharat (खरात)', 'Waghmare (वाघमारे)'
+        'Deshmukh (देशमुख)', 'Bhosale (भोसले)', 'Koli (कोळी)', 'Sawant (सावंत)'
     ];
 
-    const districts = ['Pune Rural', 'Satara', 'Solapur', 'Kolhapur', 'Ahmednagar', 'Sangli', 'Nashik', 'Nagpur', 'Aurangabad', 'Amravati'];
+    const districts = ['Pune Rural', 'Satara', 'Solapur', 'Kolhapur', 'Ahmednagar', 'Sangli', 'Nashik', 'Nagpur'];
 
     const families = [];
 
-    for (let i = 1; i <= 200; i++) {
+    // Family 1: Laxmibai Dashrath Gaikwad (MH-PDS-2026-4420)
+    families.push({
+        cardNumber: 'MH-PDS-2026-4420',
+        pin: '1111',
+        password: '1111',
+        headOfFamily: 'Laxmibai Dashrath Gaikwad',
+        headOfFamilyMarathi: 'लक्ष्मीबाई दशरथ गायकवाड',
+        gender: 'Female',
+        category: 'PHH',
+        cardColor: 'orange',
+        categoryName: 'Priority Household (केशरी कार्ड)',
+        assignedFPS: 'FPS1001',
+        district: 'Pune Rural',
+        state: 'Maharashtra',
+        mobile: '9876543210',
+        familyMembers: [
+            {
+                name: 'Laxmibai Gaikwad (लक्ष्मीबाई गायकवाड)',
+                relation: 'Head',
+                age: 62,
+                gender: 'Female',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-4420',
+                photo: '👵'
+            },
+            {
+                name: 'Prakash Gaikwad (प्रकाश गायकवाड)',
+                relation: 'Son',
+                age: 35,
+                gender: 'Male',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-8912',
+                photo: '👨'
+            },
+            {
+                name: 'Kavita Gaikwad (कविता गायकवाड)',
+                relation: 'Daughter-in-law',
+                age: 30,
+                gender: 'Female',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-3341',
+                photo: '👩'
+            }
+        ],
+        currentQuota: {
+            month: 'August 2026',
+            status: 'BOOKED',
+            rice: { kg: 9, ratePerKg: 0, total: 0 },
+            wheat: { kg: 6, ratePerKg: 0, total: 0 },
+            sugar: { kg: 1, ratePerKg: 20, total: 20 },
+            oil: { litres: 0, ratePerLitre: 100, total: 0 }
+        },
+        activeToken: {
+            tokenNo: 'TK-029',
+            slotId: 'slot1',
+            slotLabel: 'Morning Slot (10:00 AM – 12:00 PM)',
+            date: '2026-08-20',
+            otp: '4829',
+            issuedAt: '2026-08-19 10:15 AM'
+        },
+        passbook: [
+            {
+                month: 'July 2026',
+                date: '2026-07-06 11:20 AM',
+                tokenNo: 'TK-018',
+                fpsId: 'FPS1001',
+                dealerName: 'Chandrakant Vithalrao Kadam (चंद्रकांत कदम)',
+                items: [
+                    { name: 'Rice (तांदूळ)', qty: '9 kg', price: '₹0 (Free)' },
+                    { name: 'Wheat (गहू)', qty: '6 kg', price: '₹0 (Free)' },
+                    { name: 'Sugar (साखर)', qty: '1 kg', price: '₹20' }
+                ],
+                totalAmount: 20,
+                verificationMethod: 'Aadhaar Biometric e-KYC',
+                receiptId: 'RCP-20260706-4420'
+            }
+        ]
+    });
+
+    // Family 2: Tukaram Jadhav (AAY - पिवळे कार्ड)
+    families.push({
+        cardNumber: 'MH-PDS-2026-0001',
+        pin: '1111',
+        password: '1111',
+        headOfFamily: 'Tukaram Pandurang Jadhav',
+        headOfFamilyMarathi: 'तुकाराम पांडुरंग जाधव',
+        gender: 'Male',
+        category: 'AAY',
+        cardColor: 'yellow',
+        categoryName: 'Antyodaya Anna Yojana (AAY - पिवळे कार्ड)',
+        assignedFPS: 'FPS1001',
+        district: 'Pune Rural',
+        state: 'Maharashtra',
+        mobile: '9822010001',
+        familyMembers: [
+            {
+                name: 'Tukaram Jadhav (तुकाराम जाधव)',
+                relation: 'Head',
+                age: 58,
+                gender: 'Male',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-1001',
+                photo: '👨‍🌾'
+            },
+            {
+                name: 'Sunita Jadhav (सुनिता जाधव)',
+                relation: 'Wife',
+                age: 52,
+                gender: 'Female',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-2001',
+                photo: '🧕'
+            }
+        ],
+        currentQuota: {
+            month: 'August 2026',
+            status: 'AVAILABLE',
+            rice: { kg: 20, ratePerKg: 0, total: 0 },
+            wheat: { kg: 15, ratePerKg: 0, total: 0 },
+            sugar: { kg: 1, ratePerKg: 20, total: 20 },
+            oil: { litres: 1, ratePerLitre: 100, total: 100 }
+        },
+        activeToken: null,
+        passbook: []
+    });
+
+    for (let i = 3; i <= 500; i++) {
         const cardNum = `MH-PDS-2026-${String(i).padStart(4, '0')}`;
         const fn = firstNames[(i - 1) % firstNames.length];
         const ln = lastNames[(i - 1) % lastNames.length];
@@ -55,124 +164,43 @@ function generate200Families() {
         const isAAY = i % 3 === 1;
         const fpsId = i % 2 === 1 ? 'FPS1001' : 'FPS1002';
         const memberCount = (i % 4) + 2;
-
-        const familyMembers = [
-            {
-                name: `${fn.en} ${ln.split(' ')[0]} (${fn.mr} ${ln.split(' ')[1] || ''})`,
-                relation: 'Head',
-                age: 40 + (i % 28),
-                gender: fn.g,
-                aadhaarLinked: true,
-                aadhaarNo: `XXXX-XXXX-${String(1000 + i).slice(-4)}`,
-                photo: fn.g === 'Male' ? '👨‍🌾' : '🧕'
-            }
-        ];
-
-        if (memberCount >= 2) {
-            familyMembers.push({
-                name: fn.g === 'Male' ? `Sunita ${ln.split(' ')[0]} (सुनिता)` : `Sambhaji ${ln.split(' ')[0]} (संभाजी)`,
-                relation: fn.g === 'Male' ? 'Wife' : 'Husband',
-                age: 36 + (i % 24),
-                gender: fn.g === 'Male' ? 'Female' : 'Male',
-                aadhaarLinked: true,
-                aadhaarNo: `XXXX-XXXX-${String(2000 + i).slice(-4)}`,
-                photo: fn.g === 'Male' ? '🧕' : '👨‍🌾'
-            });
-        }
-        if (memberCount >= 3) {
-            familyMembers.push({
-                name: `Ganesh ${ln.split(' ')[0]} (गणेश)`,
-                relation: 'Son',
-                age: 16 + (i % 10),
-                gender: 'Male',
-                aadhaarLinked: true,
-                aadhaarNo: `XXXX-XXXX-${String(3000 + i).slice(-4)}`,
-                photo: '👦'
-            });
-        }
-        if (memberCount >= 4) {
-            familyMembers.push({
-                name: `Radha ${ln.split(' ')[0]} (राधा)`,
-                relation: 'Daughter',
-                age: 12 + (i % 8),
-                gender: 'Female',
-                aadhaarLinked: true,
-                aadhaarNo: `XXXX-XXXX-${String(4000 + i).slice(-4)}`,
-                photo: '👧'
-            });
-        }
-        if (memberCount >= 5) {
-            familyMembers.push({
-                name: `Anusaya ${ln.split(' ')[0]} (अनुसया)`,
-                relation: 'Mother',
-                age: 65 + (i % 12),
-                gender: 'Female',
-                aadhaarLinked: true,
-                aadhaarNo: `XXXX-XXXX-${String(5000 + i).slice(-4)}`,
-                photo: '👵'
-            });
-        }
-
-        const riceKg = isAAY ? 20 : (memberCount * 3);
-        const wheatKg = isAAY ? 15 : (memberCount * 2);
-        const sugarKg = isAAY ? 2 : 1;
-        const oilL = isAAY ? 1 : 0;
-
-        const riceRate = isAAY ? 0 : 3;
-        const wheatRate = isAAY ? 0 : 2;
-        const sugarRate = 20;
-        const oilRate = 45;
+        const mobileNum = `98220${String(10000 + i).slice(-5)}`;
 
         families.push({
             cardNumber: cardNum,
-            pin: '1234',
-            password: '1234',
+            pin: '1111',
+            password: '1111',
             headOfFamily: `${fn.en} ${ln.split(' ')[0]}`,
-            headOfFamilyMarathi: `${fn.mr} ${ln.split(' ')[1]?.replace(/[()]/g, '') || ln.split(' ')[0]}`,
-            headOfFamilyHindi: `${fn.hi} ${ln.split(' ')[1]?.replace(/[()]/g, '') || ln.split(' ')[0]}`,
+            headOfFamilyMarathi: `${fn.mr} ${ln.split(' ')[1] || ''}`.replace(/[()]/g, '').trim(),
             gender: fn.g,
-            age: 42 + (i % 25),
             category: isAAY ? 'AAY' : 'PHH',
-            categoryName: isAAY ? 'Antyodaya Anna Yojana (पिवळे कार्ड)' : 'Priority Household (केशरी कार्ड)',
             cardColor: isAAY ? 'yellow' : 'orange',
-            district: dist,
-            mobile: `98****${String(1000 + i * 37).slice(-4)}`,
+            categoryName: isAAY ? 'Antyodaya Anna Yojana (AAY - पिवळे कार्ड)' : 'Priority Household (PHH - केशरी कार्ड)',
             assignedFPS: fpsId,
-            familyMembers: familyMembers,
+            district: dist,
+            state: 'Maharashtra',
+            mobile: mobileNum,
+            familyMembers: [
+                {
+                    name: `${fn.en} ${ln.split(' ')[0]}`,
+                    relation: 'Head',
+                    age: 42,
+                    gender: fn.g,
+                    aadhaarLinked: true,
+                    aadhaarNo: `XXXX-XXXX-${String(1000 + i).slice(-4)}`,
+                    photo: fn.g === 'Male' ? '👨‍🌾' : '🧕'
+                }
+            ],
             currentQuota: {
                 month: 'August 2026',
-                status: (i === 2) ? 'BOOKED' : 'AVAILABLE',
-                rice: { kg: riceKg, ratePerKg: riceRate, total: riceKg * riceRate },
-                wheat: { kg: wheatKg, ratePerKg: wheatRate, total: wheatKg * wheatRate },
-                sugar: { kg: sugarKg, ratePerKg: sugarRate, total: sugarKg * sugarRate },
-                oil: { litres: oilL, ratePerLitre: oilRate, total: oilL * oilRate }
+                status: 'AVAILABLE',
+                rice: { kg: isAAY ? 20 : memberCount * 3, ratePerKg: 0, total: 0 },
+                wheat: { kg: isAAY ? 15 : memberCount * 2, ratePerKg: 0, total: 0 },
+                sugar: { kg: 1, ratePerKg: 20, total: 20 },
+                oil: { litres: isAAY ? 1 : 0, ratePerLitre: 100, total: isAAY ? 100 : 0 }
             },
-            activeToken: (i === 2) ? {
-                tokenNo: 'TK-018',
-                slotId: 'slot1',
-                slotLabel: '10:00 AM - 12:00 PM',
-                date: '2026-08-15',
-                otp: '7842',
-                status: 'READY_FOR_PICKUP',
-                queuePosition: 4
-            } : null,
-            passbook: [
-                {
-                    month: 'July 2026',
-                    date: '2026-07-08 11:24 AM',
-                    tokenNo: `TK-07${String(i).padStart(2, '0')}`,
-                    fpsId: fpsId,
-                    dealerName: fpsId === 'FPS1001' ? 'Rameshwar Patil' : 'Santosh Shinde',
-                    items: [
-                        { name: 'Rice (तांदूळ)', qty: `${riceKg} kg`, price: `₹${riceKg * riceRate}` },
-                        { name: 'Wheat (गहू)', qty: `${wheatKg} kg`, price: `₹${wheatKg * wheatRate}` },
-                        { name: 'Sugar (साखर)', qty: `${sugarKg} kg`, price: `₹${sugarKg * sugarRate}` }
-                    ],
-                    totalAmount: (riceKg * riceRate) + (wheatKg * wheatRate) + (sugarKg * sugarRate),
-                    verificationMethod: 'Aadhaar OTP Verified',
-                    receiptId: `RCP-20260708-${String(i).padStart(4, '0')}`
-                }
-            ]
+            activeToken: null,
+            passbook: []
         });
     }
 
@@ -182,92 +210,66 @@ function generate200Families() {
 const defaultInitialState = {
     session: {
         isLoggedIn: false,
-        role: null, // 'citizen' | 'shopkeeper' | 'admin'
-        citizenCard: null,
-        shopId: null,
+        role: null,
+        citizenCard: 'MH-PDS-2026-4420',
+        shopId: 'FPS1001',
         adminId: null
     },
+    currentLanguage: 'mr',
     shops: [
         {
             id: 'FPS1001',
-            password: '1234',
-            adminPass: 'admin',
+            password: 'shop8888',
+            adminPass: 'dealer',
             name: 'Shivaji Maharaj Sahakari FPS',
             marathiName: 'श्री शिवाजी महाराज सहकारी रास्त भाव धान्य दुकान',
-            dealerName: 'Rameshwar Patil (रामेश्वर पाटील)',
-            contact: '+91 98220 12345',
+            dealerName: 'Chandrakant Vithalrao Kadam (चंद्रकांत विठ्ठलराव कदम)',
+            contact: '+91 98220 54321',
             location: 'Pune Rural - Baramati Ward #4',
             pincode: '413102',
             isOpen: true,
             currentServingToken: 14,
             godownDeliveryDate: '2026-08-01',
             inventory: {
-                rice: { dispatched: 8000, distributed: 2850 },
-                wheat: { dispatched: 6500, distributed: 2100 },
-                sugar: { dispatched: 1200, distributed: 490 },
-                oil: { dispatched: 900, distributed: 310 }
+                rice: { dispatched: 15000, distributed: 4850 },
+                wheat: { dispatched: 6000, distributed: 4900 },
+                sugar: { dispatched: 1000, distributed: 790 },
+                oil: { dispatched: 1800, distributed: 510 }
             },
             slots: {
-                slot1: { id: 'slot1', label: '10:00 AM - 12:00 PM', time: '10:00 - 12:00', max: 50, booked: 18 },
-                slot2: { id: 'slot2', label: '12:00 PM - 02:00 PM', time: '12:00 - 14:00', max: 50, booked: 14 },
-                slot3: { id: 'slot3', label: '04:00 PM - 08:00 PM', time: '16:00 - 20:00', max: 60, booked: 21 }
+                slot1: { id: 'slot1', label: 'Morning Slot (10:00 AM – 12:00 PM)', time: '10:00 - 12:00', max: 50, booked: 43 },
+                slot2: { id: 'slot2', label: 'Mid-Day Slot (12:00 PM – 02:00 PM)', time: '12:00 - 14:00', max: 50, booked: 39 },
+                slot3: { id: 'slot3', label: 'Evening Slot (04:00 PM – 08:00 PM)', time: '16:00 - 20:00', max: 60, booked: 46 }
             }
         },
         {
             id: 'FPS1002',
-            password: '1234',
-            adminPass: 'admin',
-            name: 'Kisan Seva Kendra FPS',
-            marathiName: 'किसान सेवा केंद्र रास्त भाव दुकान',
-            dealerName: 'Santosh Shinde (संतोष शिंदे)',
-            contact: '+91 98221 67890',
+            password: 'shop1002',
+            adminPass: 'dealer',
+            name: 'Jai Kisan Gramin Sahakari Bhandar',
+            marathiName: 'जय किसान ग्रामीण सहकारी धान्य भांडार',
+            dealerName: 'Dnyaneshwar Mahadevrao Shinde (ज्ञानेश्वर महादेवराव शिंदे)',
+            contact: '+91 98221 98765',
             location: 'Satara District - Karad East',
             pincode: '415110',
             isOpen: true,
             currentServingToken: 9,
             godownDeliveryDate: '2026-08-02',
             inventory: {
-                rice: { dispatched: 7500, distributed: 1900 },
-                wheat: { dispatched: 5500, distributed: 1480 },
-                sugar: { dispatched: 1100, distributed: 390 },
-                oil: { dispatched: 800, distributed: 240 }
+                rice: { dispatched: 12000, distributed: 3600 },
+                wheat: { dispatched: 10000, distributed: 2800 },
+                sugar: { dispatched: 2000, distributed: 600 },
+                oil: { dispatched: 1200, distributed: 340 }
             },
             slots: {
-                slot1: { id: 'slot1', label: '10:00 AM - 12:00 PM', time: '10:00 - 12:00', max: 50, booked: 12 },
-                slot2: { id: 'slot2', label: '12:00 PM - 02:00 PM', time: '12:00 - 14:00', max: 50, booked: 8 },
-                slot3: { id: 'slot3', label: '04:00 PM - 08:00 PM', time: '16:00 - 20:00', max: 60, booked: 15 }
+                slot1: { id: 'slot1', label: 'Morning Slot (10:00 AM – 12:00 PM)', time: '10:00 - 12:00', max: 50, booked: 20 },
+                slot2: { id: 'slot2', label: 'Mid-Day Slot (12:00 PM – 02:00 PM)', time: '12:00 - 14:00', max: 50, booked: 15 },
+                slot3: { id: 'slot3', label: 'Evening Slot (04:00 PM – 08:00 PM)', time: '16:00 - 20:00', max: 60, booked: 18 }
             }
         }
     ],
-    citizens: generate200Families(),
-    grievances: [
-        {
-            id: 'GRV-2026-108',
-            cardNumber: 'MH-PDS-2026-0012',
-            citizenName: 'Kishor More (किशोर मोरे)',
-            fpsId: 'FPS1001',
-            fpsName: 'Shivaji Maharaj Sahakari FPS',
-            issueType: 'DENIED_RATION',
-            title: 'Dealer claimed stock finished despite portal showing 5,150 kg balance',
-            timestamp: '2026-08-15 11:15 AM',
-            status: 'INVESTIGATING',
-            priority: 'CRITICAL',
-            actionTaken: 'Food Supply Inspector Shri S. Deshmukh dispatched to FPS1001'
-        },
-        {
-            id: 'GRV-2026-102',
-            cardNumber: 'MH-PDS-2026-0045',
-            citizenName: 'Anusaya Bai (अनुसया बाई)',
-            fpsId: 'FPS1002',
-            fpsName: 'Kisan Seva Kendra FPS',
-            issueType: 'OVERCHARGING',
-            title: 'Demanded ₹50 extra for sugar handling charges',
-            timestamp: '2026-08-14 03:30 PM',
-            status: 'RESOLVED',
-            priority: 'HIGH',
-            actionTaken: 'Fine of ₹5,000 imposed on FPS1002 and ₹50 refunded to citizen'
-        }
-    ],
+    citizens: generate500Families(),
+    grievances: [],
     adminStats: {
         totalFairPriceShops: 52410,
         activeShopsOnline: 51892,
@@ -322,7 +324,7 @@ class DataStore {
     }
 
     getCurrentCitizen() {
-        const card = this.state.session.citizenCard || 'MH-PDS-2026-0001';
+        const card = this.state.session.citizenCard || 'MH-PDS-2026-4420';
         return this.state.citizens.find(c => c.cardNumber.toUpperCase() === card.toUpperCase()) || this.state.citizens[0];
     }
 
@@ -334,6 +336,11 @@ class DataStore {
     getCitizenByCard(cardNo) {
         if (!cardNo) return null;
         return this.state.citizens.find(c => c.cardNumber.toUpperCase() === cardNo.trim().toUpperCase());
+    }
+
+    getShop(fpsId) {
+        if (!fpsId) return this.state.shops[0];
+        return this.state.shops.find(s => s.id.toUpperCase() === fpsId.trim().toUpperCase()) || this.state.shops[0];
     }
 
     setLanguage(lang) {

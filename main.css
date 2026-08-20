@@ -1138,3 +1138,256 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
         font-size: 1.6rem;
     }
 }
+
+/* =========================================================================
+   CITIZEN-TO-GOVERNMENT QUERY & HELPDESK STYLES
+   ========================================================================= */
+
+.query-section-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 24px;
+    margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+    .query-section-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.query-form-box {
+    background: #f8fafc;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 20px;
+}
+
+.query-form-box h4 {
+    margin: 0 0 16px 0;
+    color: var(--primary-navy);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.query-history-box h4 {
+    margin: 0 0 16px 0;
+    color: var(--primary-navy);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.citizen-queries-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 520px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.query-ticket-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-subtle);
+}
+
+.query-ticket-card.query-replied {
+    border-left: 4px solid #10b981;
+}
+
+.query-ticket-card.query-pending {
+    border-left: 4px solid #f59e0b;
+}
+
+.query-ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.query-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.query-id-tag {
+    font-family: monospace;
+    font-weight: 700;
+    background: #e2e8f0;
+    color: #1e293b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.query-category-tag {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.query-status-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.query-status-badge.badge-replied {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.query-status-badge.badge-pending {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.query-question-body h5 {
+    margin: 0 0 6px 0;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.query-text {
+    margin: 0 0 8px 0;
+    font-size: 0.925rem;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.query-time {
+    display: block;
+    font-size: 0.78rem;
+    color: #94a3b8;
+}
+
+.query-officer-response {
+    margin-top: 14px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+}
+
+.officer-response-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.officer-seal-icon {
+    font-size: 1.5rem;
+    background: #dcfce7;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.officer-response-header strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #065f46;
+}
+
+.officer-time {
+    display: block;
+    font-size: 0.75rem;
+    color: #059669;
+}
+
+.gov-verified-stamp {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #dcfce7;
+    color: #15803d;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #86efac;
+}
+
+.officer-response-content p {
+    margin: 0;
+    font-size: 0.925rem;
+    color: #14532d;
+    line-height: 1.55;
+}
+
+.query-pending-notice {
+    margin-top: 12px;
+    background: #fffbeb;
+    border: 1px dashed #fcd34d;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #92400e;
+}
+
+/* Admin Support Desk */
+.query-filter-pills {
+    display: flex;
+    gap: 8px;
+}
+
+.admin-queries-queue {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.admin-query-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.admin-query-card.admin-query-pending {
+    border-left: 4px solid #f59e0b;
+}
+
+.admin-query-card.admin-query-answered {
+    border-left: 4px solid #10b981;
+}
+
+.admin-query-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.district-badge {
+    font-size: 0.8rem;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+

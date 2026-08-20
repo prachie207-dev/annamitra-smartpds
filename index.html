@@ -14,11 +14,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/citizen.css">
-    <link rel="stylesheet" href="css/shopkeeper.css">
-    <link rel="stylesheet" href="css/admin.css">
+    <!-- Stylesheets with Universal Fallbacks -->
+    <link rel="stylesheet" href="css/main.css" onerror="this.onerror=null; this.href='main.css';">
+    <link rel="stylesheet" href="css/citizen.css" onerror="this.onerror=null; this.href='citizen.css';">
+    <link rel="stylesheet" href="css/shopkeeper.css" onerror="this.onerror=null; this.href='shopkeeper.css';">
+    <link rel="stylesheet" href="css/admin.css" onerror="this.onerror=null; this.href='admin.css';">
 </head>
 <body>
 
@@ -130,7 +130,7 @@
 
                 <div class="role-cards-grid">
                     <!-- 1. Citizen Gateway -->
-                    <div class="home-role-card" data-target-role="citizen">
+                    <div class="home-role-card" data-target-role="citizen" onclick="window.openRolePortal('citizen')">
                         <div class="role-card-icon">👨‍👩‍👧‍👦</div>
                         <div>
                             <h3 data-i18n="roleCardCitizenTitle">नागरिक / कार्डधारक</h3>
@@ -143,7 +143,7 @@
                     </div>
 
                     <!-- 2. Shopkeeper Gateway -->
-                    <div class="home-role-card" data-target-role="shopkeeper">
+                    <div class="home-role-card" data-target-role="shopkeeper" onclick="window.openRolePortal('shopkeeper')">
                         <div class="role-card-icon">🏪</div>
                         <div>
                             <h3 data-i18n="roleCardShopkeeperTitle">रास्त भाव दुकानदार</h3>
@@ -156,7 +156,7 @@
                     </div>
 
                     <!-- 3. Admin Gateway (Direct 1-Click Entry) -->
-                    <div class="home-role-card" data-target-role="admin">
+                    <div class="home-role-card" data-target-role="admin" onclick="window.openRolePortal('admin')">
                         <div class="role-card-icon">🏛️</div>
                         <div>
                             <h3 data-i18n="roleCardAdminTitle">शासकीय अधिकारी कक्ष</h3>
@@ -247,16 +247,16 @@
                                     <span>📇</span> <span>Ration Card Number or Mobile</span>
                                 </label>
                                 <div class="login-input-wrap">
-                                    <input type="text" id="login-citizen-card" class="login-input-field" placeholder="e.g. MH-PDS-2026-0001 or 9822010001" required />
+                                    <input type="text" id="login-citizen-card" class="login-input-field" placeholder="e.g. MH-PDS-2026-4420 or 9876543210" value="MH-PDS-2026-4420" required />
                                 </div>
                             </div>
 
                             <div class="login-form-group">
                                 <label for="login-citizen-pin">
-                                    <span>🔒</span> <span data-i18n="inputPassword">Password / PIN</span>
+                                    <span>🔒</span> <span data-i18n="inputPassword">Customer PIN (पिन: 1111)</span>
                                 </label>
                                 <div class="login-input-wrap">
-                                    <input type="password" id="login-citizen-pin" class="login-input-field" placeholder="••••••••" required />
+                                    <input type="password" id="login-citizen-pin" class="login-input-field" placeholder="Default: 1111" value="1111" required />
                                     <span class="password-toggle-eye" data-for="login-citizen-pin">👁️</span>
                                 </div>
                             </div>
@@ -264,6 +264,10 @@
                             <button type="submit" class="btn btn-primary btn-block btn-lg" data-i18n="loginBtn">
                                 ✅ Login with PIN
                             </button>
+
+                            <div style="margin-top: 12px; padding: 10px; background: #eff6ff; border-radius: 6px; font-size: 0.82rem; color: #1e40af; border: 1px solid #bfdbfe; text-align: center;">
+                                💡 <strong>नागरिक लॉगिन:</strong> कार्ड क्र. <code>MH-PDS-2026-4420</code> किंवा आपला मोबाईल नंबर | पिन: <code>1111</code>
+                            </div>
                         </form>
                     </div>
 
@@ -274,7 +278,7 @@
                                 <span>📇</span> <span data-i18n="inputRationCardNo">Ration Card Number (Optional)</span>
                             </label>
                             <div class="login-input-wrap">
-                                <input type="text" id="login-citizen-card-bio" class="login-input-field" placeholder="e.g. MH-PDS-2026-0001" />
+                                <input type="text" id="login-citizen-card-bio" class="login-input-field" placeholder="e.g. MH-PDS-2026-4420" value="MH-PDS-2026-4420" />
                             </div>
                         </div>
 
@@ -306,7 +310,7 @@
                                 <span>📱</span> <span>Ration Card # or Registered Mobile</span>
                             </label>
                             <div class="login-input-wrap" style="gap: 8px;">
-                                <input type="text" id="login-citizen-mobile-card" class="login-input-field" placeholder="e.g. MH-PDS-2026-0001 or 9822010001" />
+                                <input type="text" id="login-citizen-mobile-card" class="login-input-field" placeholder="e.g. MH-PDS-2026-4420 or 9876543210" value="MH-PDS-2026-4420" />
                                 <button type="button" class="btn btn-outline" id="btn-send-sms-otp" style="white-space: nowrap; font-size: 0.85rem;">
                                     📲 Send OTP
                                 </button>
@@ -366,16 +370,16 @@
                                 <span>🏪</span> <span data-i18n="inputFpsId">Fair Price Shop ID</span>
                             </label>
                             <div class="login-input-wrap">
-                                <input type="text" id="login-fps-id" class="login-input-field" placeholder="e.g. FPS1001" required />
+                                <input type="text" id="login-fps-id" class="login-input-field" placeholder="e.g. FPS1001" value="FPS1001" required />
                             </div>
                         </div>
 
                         <div class="login-form-group">
                             <label for="login-fps-password">
-                                <span>🔒</span> <span data-i18n="inputPassword">Password</span>
+                                <span>🔒</span> <span data-i18n="inputPassword">Shopkeeper Password</span>
                             </label>
                             <div class="login-input-wrap">
-                                <input type="password" id="login-fps-password" class="login-input-field" placeholder="Default: shop1234 or 1234" required />
+                                <input type="password" id="login-fps-password" class="login-input-field" placeholder="Password: shop8888" value="shop8888" required />
                                 <span class="password-toggle-eye" data-for="login-fps-password">👁️</span>
                             </div>
                         </div>
@@ -383,6 +387,10 @@
                         <button type="submit" class="btn btn-primary btn-block btn-lg" data-i18n="loginBtn">
                             ✅ Login
                         </button>
+
+                        <div style="margin-top: 12px; padding: 10px; background: #fefce8; border-radius: 6px; font-size: 0.82rem; color: #854d0e; border: 1px solid #fef08a; text-align: center;">
+                            💡 <strong>दुकानदार लॉगिन:</strong> दुकान आयडी (FPS ID): <code>FPS1001</code> | पासवर्ड: <code>shop8888</code>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -402,18 +410,27 @@
                     <div class="profile-main-meta">
                         <div class="citizen-avatar-large">👨‍🌾</div>
                         <div class="profile-text">
-                            <h2 id="citizen-head-name">Santoshrao Gaikwad</h2>
+                            <h2 id="citizen-head-name">Laxmibai Dashrath Gaikwad</h2>
                             <div class="profile-card-tags">
-                                <span class="ration-card-number-tag" id="citizen-card-no">MH-PDS-2026-0001</span>
-                                <span class="badge badge-yellow" id="citizen-card-category">Antyodaya Anna Yojana</span>
-                                <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff;" id="citizen-district-tag">Maharashtra</span>
+                                <span class="ration-card-number-tag" id="citizen-card-no">MH-PDS-2026-4420</span>
+                                <span class="badge badge-orange" id="citizen-card-category">Priority Household (केशरी कार्ड)</span>
+                                <span class="badge" style="background:rgba(255,255,255,0.2); color:#fff;" id="citizen-district-tag">Pune Rural</span>
+                            </div>
+                            <!-- Switch Beneficiary Demo -->
+                            <div class="demo-citizen-picker-wrap" style="margin-top: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span style="font-size: 0.825rem; color: #93c5fd; font-weight: 600;">Switch Beneficiary Demo:</span>
+                                <select id="demo-beneficiary-switcher" style="background: rgba(255,255,255,0.18); color: #ffffff; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; padding: 4px 10px; font-size: 0.825rem; cursor: pointer; outline: none;">
+                                    <option value="MH-PDS-2026-4420" style="color: #0f172a;" selected>Laxmibai Dashrath Gaikwad (PHH - केशरी कार्ड)</option>
+                                    <option value="MH-PDS-2026-0001" style="color: #0f172a;">Tukaram Jadhav (AAY - पिवळे कार्ड)</option>
+                                    <option value="MH-PDS-2026-0003" style="color: #0f172a;">Santoshrao Gaikwad (PHH - केशरी कार्ड)</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="profile-fps-assigned">
-                        <span class="fps-label-small" data-i18n="assignedFps">आपले अधिकृत रेशन दुकान:</span>
-                        <div class="fps-name-text" id="citizen-assigned-shop">Shree Gajanan Maharaj Sahakari FPS (FPS1001)</div>
+                        <span class="fps-label-small" data-i18n="assignedFps">ASSIGNED FAIR PRICE SHOP:</span>
+                        <div class="fps-name-text" id="citizen-assigned-shop">Shivaji Maharaj Sahakari FPS (FPS1001)</div>
                     </div>
                 </div>
 
@@ -493,6 +510,65 @@
                         </div>
                     </div>
                     <div class="passbook-history-list" id="passbook-history-list"></div>
+                </div>
+
+                <!-- Direct Citizen-to-Government Query & Helpdesk Section -->
+                <div class="section-card query-desk-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="queryDeskTitle">💬 थेट शासकीय मदत व शंका निवारण</h2>
+                            <p data-i18n="queryDeskSub">आपले रेशन कार्ड, धान्य कोटा किंवा योजनेबाबत थेट अन्न व नागरी पुरवठा विभागाकडे प्रश्न विचारा.</p>
+                        </div>
+                    </div>
+
+                    <div class="query-section-layout">
+                        <!-- Query Submission Form -->
+                        <div class="query-form-box">
+                            <h4>✍️ नवीन प्रश्न / शंका विचारा (Ask Government)</h4>
+                            <form id="form-citizen-query">
+                                <div class="login-form-group">
+                                    <label for="query-category" data-i18n="queryCategory">चौकशीचा विषय निवडा</label>
+                                    <div class="login-input-wrap">
+                                        <select id="query-category" class="login-input-field" required>
+                                            <option value="MEMBER_UPDATE">🏷️ रेशन कार्ड नाव / सदस्य बदल चौकशी</option>
+                                            <option value="QUOTA_PRICING">⚖️ धान्य कोटा व सवलत दर माहिती</option>
+                                            <option value="SHOP_TRANSFER">📍 रेशन दुकान स्थलांतर विनंती</option>
+                                            <option value="SCHEME_ELIGIBILITY" selected>📜 अंत्योदय / प्राधान्य कुटुंब पात्रता</option>
+                                            <option value="GENERAL">❓ सर्वसाधारण शासकीय मदत व चौकशी</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="login-form-group">
+                                    <label for="query-subject" data-i18n="querySubject">विषय (थोडक्यात)</label>
+                                    <div class="login-input-wrap">
+                                        <input type="text" id="query-subject" class="login-input-field" placeholder="उदा. तेल व साखर वाटपाबाबत माहिती हवी आहे" required />
+                                    </div>
+                                </div>
+
+                                <div class="login-form-group">
+                                    <label for="query-message" data-i18n="queryMessage">आपला प्रश्न / समस्या सविस्तर लिहा</label>
+                                    <div class="login-input-wrap">
+                                        <textarea id="query-message" class="login-input-field" rows="3" placeholder="आपला सविस्तर प्रश्न येथे टाईप करा..." required style="resize:vertical;"></textarea>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block" data-i18n="submitQueryBtn" id="btn-submit-citizen-query">
+                                    शासनाला प्रश्न पाठवा 🚀
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Submitted Queries & Government Official Responses Feed -->
+                        <div class="query-history-box">
+                            <h4 data-i18n="myQueriesTitle">📋 माझे विचारलेले प्रश्न व शासकीय उत्तरे</h4>
+                            <div class="citizen-queries-feed" id="citizen-queries-feed">
+                                <div style="padding: 20px; text-align: center; color: var(--text-muted);">
+                                    लोड होत आहे...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -847,6 +923,27 @@
                     </div>
 
                     <div class="admin-grievances-queue" id="admin-grievances-queue"></div>
+                </div>
+
+                <!-- Direct Citizen Query & Support Desk -->
+                <div class="section-card">
+                    <div class="section-header-row">
+                        <div class="section-title-wrap">
+                            <h2 data-i18n="adminQueryTitle">📬 थेट नागरिक प्रश्न व शंका निवारण डेस्क</h2>
+                            <p data-i18n="adminQuerySubtitle">नागरिकांनी विचारलेल्या सर्व प्रश्नांची थेट यादी व अधिकृत मार्गदर्शन निवारण कक्ष</p>
+                        </div>
+                        <div class="query-filter-pills" id="admin-query-filter-pills">
+                            <button class="pill-btn active" data-filter="ALL">सर्व प्रश्न (<span id="count-all-queries">0</span>)</button>
+                            <button class="pill-btn" data-filter="PENDING">उत्तर प्रलंबित (<span id="count-pending-queries">0</span>)</button>
+                            <button class="pill-btn" data-filter="REPLIED">उत्तर दिलेले (<span id="count-replied-queries">0</span>)</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-queries-queue" id="admin-queries-queue">
+                        <div style="padding: 24px; text-align: center; color: var(--text-muted);">
+                            नागरिक प्रश्न लोड होत आहेत...
+                        </div>
+                    </div>
                 </div>
 
             </div>

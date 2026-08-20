@@ -1,7 +1,7 @@
 /**
- * Annasetu (अन्नसेतू) - Government Command Center & Telemetry Logic
+ * AnnaMitra (अन्नमित्र) - Government Command Center & Telemetry Logic
  * State-wide supply monitoring, AI Anomaly detection, citizen grievances,
- * and Shopkeeper Member Deletion / Modification Approval Desk.
+ * Shopkeeper Member Deletion Approvals, and Direct Citizen Query & Support Desk.
  */
 
 class AdminPortal {
@@ -24,6 +24,7 @@ class AdminPortal {
         this.renderAIAnomalies();
         this.renderPendingShopkeeperRequests(telemetry.pendingRequests || []);
         this.renderGrievancesQueue(telemetry.grievances);
+        this.renderQueriesQueue('ALL');
     }
 
     renderTelemetryStats(stats) {
@@ -81,7 +82,7 @@ class AdminPortal {
         if (!requests || requests.length === 0) {
             container.innerHTML = `
                 <div class="empty-state-card" style="padding:24px; text-align:center; background:#f8fafc; border-radius:12px;">
-                    <p style="color:#64748b;">✅ No pending shopkeeper deletion or modification requests.</p>
+                    <p style="color:#64748b;">✅ कोणतीही प्रलंबित विनंती नाही (No pending deletion requests).</p>
                 </div>
             `;
             return;
@@ -107,15 +108,15 @@ class AdminPortal {
                                 <td><strong>#${r.id}</strong></td>
                                 <td>${r.fpsId}<br/><small style="color:#64748b;">${r.cardNumber}</small></td>
                                 <td><strong class="text-danger">${r.memberName}</strong></td>
-                                <td><span class="badge badge-orange">${r.reason.replace('_', ' ')}</span></td>
-                                <td><code>${r.certificateNo}</code></td>
+                                <td><span class="badge badge-orange">${r.reason ? r.reason.replace('_', ' ') : 'DECEASED'}</span></td>
+                                <td><code>${r.certificateNo || r.deathCertificateNo || 'DOC-VERIFIED'}</code></td>
                                 <td>
                                     <span class="status-pill ${r.status === 'APPROVED' ? 'status-success' : (r.status === 'REJECTED' ? 'status-urgent' : 'status-booked')}">
                                         ${r.status}
                                     </span>
                                 </td>
                                 <td>
-                                    ${r.status === 'PENDING_GOVT_APPROVAL' ? `
+                                    ${r.status === 'PENDING_GOVT_APPROVAL' || r.status === 'PENDING' ? `
                                         <div style="display:flex; gap:6px;">
                                             <button class="btn btn-sm btn-primary btn-approve-request" data-req-id="${r.id}">
                                                 ✅ Approve
@@ -140,7 +141,7 @@ class AdminPortal {
         const container = document.getElementById('admin-grievances-queue');
         if (!container) return;
 
-        container.innerHTML = grievances.map(g => `
+        container.innerHTML = (grievances || []).map(g => `
             <div class="grievance-card ${g.status === 'RESOLVED' ? 'grv-resolved' : 'grv-pending'}">
                 <div class="grv-header">
                     <div>
@@ -166,6 +167,88 @@ class AdminPortal {
                 ` : ''}
             </div>
         `).join('');
+    }
+
+    async renderQueriesQueue(filter = 'ALL') {
+        const container = document.getElementById('admin-queries-queue');
+        if (!container) return;
+
+        const res = await this.api.getAdminQueries();
+        const allQueries = (res && res.success) ? res.queries : [];
+
+        const countAllEl = document.getElementById('count-all-queries');
+        const countPendingEl = document.getElementById('count-pending-queries');
+        const countRepliedEl = document.getElementById('count-replied-queries');
+
+        const pending = allQueries.filter(q => q.status === 'PENDING_REVIEW');
+        const replied = allQueries.filter(q => q.status === 'OFFICER_REPLIED');
+
+        if (countAllEl) countAllEl.textContent = allQueries.length;
+        if (countPendingEl) countPendingEl.textContent = pending.length;
+        if (countRepliedEl) countRepliedEl.textContent = replied.length;
+
+        let filtered = allQueries;
+        if (filter === 'PENDING') filtered = pending;
+        if (filter === 'REPLIED') filtered = replied;
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state-box" style="padding: 24px; text-align: center; color: var(--text-muted); background: #f8fafc; border-radius: var(--radius-md); border: 1px dashed var(--border-light);">
+                    <div style="font-size: 2rem; margin-bottom: 6px;">📬</div>
+                    <p>या श्रेणीमध्ये कोणतेही नागरिक प्रश्न नाहीत.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = filtered.map(q => {
+            const isReplied = q.status === 'OFFICER_REPLIED';
+            return `
+                <div class="admin-query-card ${isReplied ? 'admin-query-answered' : 'admin-query-pending'}">
+                    <div class="admin-query-top">
+                        <div class="query-meta-left">
+                            <span class="query-id-tag">#${q.id}</span>
+                            <span class="query-category-tag">${q.categoryLabel || q.category}</span>
+                            <strong style="margin-left: 6px; font-size: 0.95rem;">${q.citizenName}</strong>
+                            <span class="district-badge">📍 ${q.district} (FPS: ${q.assignedFPS})</span>
+                        </div>
+                        <span class="query-status-badge ${isReplied ? 'badge-replied' : 'badge-pending'}">
+                            ${isReplied ? '✅ उत्तर दिलेले (Replied)' : '⏳ उत्तर प्रलंबित (Pending Review)'}
+                        </span>
+                    </div>
+
+                    <div class="admin-query-content">
+                        <h4 style="margin: 8px 0 4px 0; color: #0b2545;">${q.subject}</h4>
+                        <p style="margin: 0 0 8px 0; color: #334155; line-height: 1.5;">${q.message}</p>
+                        <small style="color: #64748b;">📅 विचारले: ${q.submittedAt} • रेशन कार्ड: <code>${q.cardNumber}</code></small>
+                    </div>
+
+                    ${isReplied ? `
+                        <div class="admin-reply-box-done" style="margin-top: 10px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 12px 16px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                <strong style="color: #065f46;">🏛️ ${q.officerName || 'District Civil Supplies Officer'}</strong>
+                                <small style="color: #059669;">✓ उत्तर पाठवले: ${q.repliedAt}</small>
+                            </div>
+                            <p style="margin: 0; color: #064e3b; line-height: 1.5;">
+                                ${q.officerReply}
+                            </p>
+                        </div>
+                    ` : `
+                        <div class="admin-reply-form-inline" id="reply-box-${q.id}" style="margin-top: 12px; background: #f1f5f9; padding: 14px; border-radius: 8px; border: 1px solid var(--border-light);">
+                            <label style="display: block; font-weight: 600; font-size: 0.875rem; margin-bottom: 6px; color: #0f172a;">
+                                ✍️ नागरिकास अधिकृत शासकीय उत्तर व मार्गदर्शन पाठवा:
+                            </label>
+                            <textarea id="reply-text-${q.id}" class="form-control" rows="2" placeholder="उदा. आपल्या अर्जाची तपासणी झाली असून, आवश्यक कागदपत्रांसह अधिकृत दुकानात संपर्क साधावा..." style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; font-family: inherit; margin-bottom: 8px; resize: vertical;"></textarea>
+                            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                                <button class="btn btn-primary btn-sm btn-send-officer-reply" data-query-id="${q.id}">
+                                    शासकीय उत्तर पाठवा 🚀
+                                </button>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+        }).join('');
     }
 
     bindEvents() {
@@ -210,6 +293,52 @@ class AdminPortal {
                         window.annasetuApp.showToast(`❌ Request #${reqId} rejected.`, 'info');
                     }
                     this.renderAll();
+                }
+            }
+        });
+
+        // Query Filter Pills
+        document.addEventListener('click', (e) => {
+            const pill = e.target.closest('#admin-query-filter-pills .pill-btn');
+            if (pill) {
+                document.querySelectorAll('#admin-query-filter-pills .pill-btn').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                const filter = pill.getAttribute('data-filter') || 'ALL';
+                this.renderQueriesQueue(filter);
+            }
+        });
+
+        // Officer Send Reply Button
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.btn-send-officer-reply');
+            if (btn) {
+                const queryId = btn.getAttribute('data-query-id');
+                const textarea = document.getElementById(`reply-text-${queryId}`);
+                const replyText = textarea ? textarea.value.trim() : '';
+
+                if (!replyText) {
+                    alert('कृपया नागरिकास पाठवावयाचे उत्तर टाईप करा.');
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = '⏳ पाठवत आहे...';
+
+                const res = await this.api.replyAdminQuery({
+                    queryId: queryId,
+                    replyText: replyText,
+                    officerName: 'Shri R. V. Kulkarni (District Civil Supplies Officer)'
+                });
+
+                if (res.success) {
+                    if (window.annasetuApp) {
+                        window.annasetuApp.showToast(`✅ Query #${queryId} ला अधिकृत उत्तर पाठवले गेले!`, 'success');
+                    }
+                    this.renderQueriesQueue();
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = 'शासकीय उत्तर पाठवा 🚀';
+                    alert(res.error || 'Failed to send reply.');
                 }
             }
         });

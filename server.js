@@ -11,8 +11,6 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Add this line so Vercel can serve your HTML/CSS files:
-app.use(express.static(__dirname));
 // In-Memory Temporary SMS OTP Store (Key: CardNumber or Mobile -> { otp, expiresAt, citizen })
 const otpStore = new Map();
 
@@ -20,59 +18,25 @@ const otpStore = new Map();
 app.use(cors());
 app.use(express.json());
 
-// Define rootPath pointing one level up to the main project folder
-const rootPath = path.join(__dirname, '..');
-
-// Serve static frontend files and assets correctly
-app.use(express.static(rootPath));
-app.use('/css', express.static(path.join(rootPath, 'css')));
-app.use('/js', express.static(path.join(rootPath, 'js')));
-app.use('/images', express.static(path.join(rootPath, 'images')));
-
+// Serve static frontend files and images (supports nested and root directories)
+app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(__dirname));
+app.use(express.static(process.cwd()));
+app.use('/images', express.static(path.join(__dirname, '..', 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(process.cwd(), 'images')));
+app.use('/images', express.static(process.cwd()));
+// Serve index.html on the main home route
 app.get('/', (req, res) => {
-    res.sendFile(path.join(rootPath, 'index.html'));
-});
-app.get('/', (req, res) => {
-    res.sendFile(path.join(rootPath, 'index.html'));
-});
-app.get('/', (req, res) => {
-    res.sendFile(path.join(rootPath, 'index.html'));
+    res.sendFile(path.join(__dirname, '../index.html'));
 });
 // =========================================================================
-
-// 1. Citizen Password / PIN Login (Supports Ration Card # OR 10-Digit Mobile # OR Auto-Routes FPS IDs)
+// AUTHENTICATION ENDPOINTS
+// ==========================================================// 1. Citizen Password / PIN Login (Distinct PIN: "1111" / "1234")
 app.post('/api/auth/citizen/login', (req, res) => {
     const { cardNumber, pin } = req.body;
     if (!cardNumber) {
-        return res.status(400).json({ success: false, error: 'Please enter your Ration Card Number or Registered Mobile Number.' });
-    }
-
-    const cleanInput = cardNumber.toString().trim().toUpperCase();
-
-    // Smart Auto-Routing: If an FPS ID (e.g. FPS1001) is entered, authenticate into Shopkeeper Portal
-    if (cleanInput.startsWith('FPS')) {
-        const shop = db.findShop(cleanInput);
-        if (shop) {
-            const trimmedPin = pin ? pin.toString().trim() : '';
-            const isShopValid = (trimmedPin === shop.password || trimmedPin === shop.adminPass || trimmedPin === '1234' || trimmedPin === 'admin');
-            if (isShopValid) {
-                return res.json({
-                    success: true,
-                    role: 'shopkeeper',
-                    token: `FPS_TOKEN_${shop.id}`,
-                    shop: {
-                        id: shop.id,
-                        name: shop.name,
-                        marathiName: shop.marathiName,
-                        dealerName: shop.dealerName,
-                        location: shop.location,
-                        contact: shop.contact
-                    }
-                });
-            } else {
-                return res.status(401).json({ success: false, error: 'Invalid password for Shopkeeper account.' });
-            }
-        }
+        return res.status(400).json({ success: false, error: 'Ration Card Number or Registered Mobile Number is required.' });
     }
 
     const citizen = db.findCitizen(cardNumber);
@@ -81,10 +45,10 @@ app.post('/api/auth/citizen/login', (req, res) => {
     }
 
     const trimmedPin = pin ? pin.toString().trim() : '';
-    const isValidPin = (trimmedPin === citizen.pin || trimmedPin === citizen.password || trimmedPin === '1234');
+    const isValidPin = (trimmedPin === citizen.pin || trimmedPin === citizen.password || trimmedPin === '1111' || trimmedPin === '1234');
 
     if (!isValidPin) {
-        return res.status(401).json({ success: false, error: 'Invalid Password / PIN. (Default test password is 1234)' });
+        return res.status(401).json({ success: false, error: 'Invalid Password / PIN. (Customer PIN: 1111)' });
     }
 
     return res.json({
@@ -98,6 +62,7 @@ app.post('/api/auth/citizen/login', (req, res) => {
             headOfFamilyMarathi: citizen.headOfFamilyMarathi,
             category: citizen.category,
             cardColor: citizen.cardColor,
+            categoryName: citizen.categoryName,
             assignedFPS: citizen.assignedFPS,
             district: citizen.district
         }
@@ -212,7 +177,7 @@ app.post('/api/auth/citizen/verify-otp', (req, res) => {
     });
 });
 
-// 5. Shopkeeper Login (Allows "1234" and "admin")
+// 5. Shopkeeper Login (Password: "shop8888" / "shop1234")
 app.post('/api/auth/shopkeeper/login', (req, res) => {
     const { fpsId, password } = req.body;
     if (!fpsId) {
@@ -225,10 +190,10 @@ app.post('/api/auth/shopkeeper/login', (req, res) => {
     }
 
     const pass = password ? password.toString().trim() : '';
-    const isShopValid = (pass === shop.password || pass === shop.adminPass || pass === '1234' || pass === 'admin');
+    const isShopValid = (pass === shop.password || pass === shop.adminPass || pass === 'shop8888' || pass === 'shop1234' || pass === 'shop1002' || pass === 'dealer' || pass === 'admin' || pass === '1234');
 
     if (!isShopValid) {
-        return res.status(401).json({ success: false, error: 'Invalid Password (Default: 1234 or admin).' });
+        return res.status(401).json({ success: false, error: 'Invalid Password. (Shopkeeper Password: shop8888)' });
     }
 
     return res.json({
@@ -362,6 +327,70 @@ app.post('/api/citizen/sos', (req, res) => {
     db.save();
 
     return res.json({ success: true, complaint: newComplaint });
+});
+
+// Submit Citizen Query to Government Helpdesk
+app.post('/api/citizen/submit-query', (req, res) => {
+    const { cardNumber, category, subject, message } = req.body;
+    const citizen = db.findCitizen(cardNumber);
+    if (!citizen) return res.status(404).json({ success: false, error: 'Citizen account not found.' });
+
+    if (!subject || !message) {
+        return res.status(400).json({ success: false, error: 'Subject and message are required.' });
+    }
+
+    const categoryLabels = {
+        'MEMBER_UPDATE': '🏷️ रेशन कार्ड नाव / सदस्य बदल चौकशी',
+        'QUOTA_PRICING': '⚖️ धान्य कोटा व सवलत दर माहिती',
+        'SHOP_TRANSFER': '📍 रेशन दुकान स्थलांतर विनंती',
+        'SCHEME_ELIGIBILITY': '📜 अंत्योदय / प्राधान्य कुटुंब पात्रता',
+        'GENERAL': '❓ सर्वसाधारण शासकीय मदत व चौकशी'
+    };
+
+    const queryId = `QRY-${Date.now().toString().slice(-6)}`;
+    const newQuery = {
+        id: queryId,
+        cardNumber: citizen.cardNumber,
+        citizenName: citizen.headOfFamily,
+        district: citizen.district || 'Maharashtra',
+        assignedFPS: citizen.assignedFPS || 'FPS1001',
+        category: category || 'GENERAL',
+        categoryLabel: categoryLabels[category] || 'सर्वसाधारण चौकशी',
+        subject: subject.trim(),
+        message: message.trim(),
+        submittedAt: new Date().toLocaleString(),
+        status: 'PENDING_REVIEW',
+        officerReply: null,
+        repliedAt: null,
+        officerName: null
+    };
+
+    if (!db.data.queries) db.data.queries = [];
+    db.data.queries.unshift(newQuery);
+    db.save();
+
+    return res.json({
+        success: true,
+        message: 'Your query has been submitted directly to the District Food & Civil Supplies Helpdesk.',
+        query: newQuery
+    });
+});
+
+// Get Citizen Queries Feed
+app.get('/api/citizen/queries', (req, res) => {
+    const cardNo = req.query.cardNumber;
+    if (!cardNo) return res.status(400).json({ success: false, error: 'Card number is required.' });
+
+    const citizen = db.findCitizen(cardNo);
+    const targetCard = citizen ? citizen.cardNumber : cardNo.trim().toUpperCase();
+
+    const allQueries = db.data.queries || [];
+    const citizenQueries = allQueries.filter(q => q.cardNumber.toUpperCase() === targetCard);
+
+    return res.json({
+        success: true,
+        queries: citizenQueries
+    });
 });
 
 // =========================================================================
@@ -618,14 +647,45 @@ app.post('/api/admin/resolve-grievance', (req, res) => {
     return res.json({ success: true, message: 'Grievance resolved successfully.' });
 });
 
-// Start Server / Vercel Export Fix
-const PORT = process.env.PORT || 3000;
+// Get All Queries for Government Officers
+app.get('/api/admin/queries', (req, res) => {
+    const allQueries = db.data.queries || [];
+    return res.json({
+        success: true,
+        total: allQueries.length,
+        queries: allQueries
+    });
+});
 
-if (process.env.NODE_ENV !== 'production') {
+// Officer Reply to Citizen Query
+app.post('/api/admin/reply-query', (req, res) => {
+    const { queryId, replyText, officerName } = req.body;
+    if (!queryId || !replyText) {
+        return res.status(400).json({ success: false, error: 'Query ID and Reply message are required.' });
+    }
+
+    const query = (db.data.queries || []).find(q => q.id === queryId);
+    if (!query) return res.status(404).json({ success: false, error: 'Query not found.' });
+
+    query.status = 'OFFICER_REPLIED';
+    query.officerReply = replyText.trim();
+    query.repliedAt = new Date().toLocaleString();
+    query.officerName = officerName || 'Shri R. V. Kulkarni (District Civil Supplies Officer)';
+
+    db.save();
+
+    return res.json({
+        success: true,
+        message: 'Official response dispatched directly to citizen portal.',
+        query: query
+    });
+});
+
+// Start Server (if executed directly)
+if (require.main === module) {
     app.listen(PORT, () => {
         console.log(`🌾 AnnaMitra SmartPDS REST API Server is running at http://localhost:${PORT}`);
     });
 }
 
-// Export app for Vercel serverless functions
 module.exports = app;

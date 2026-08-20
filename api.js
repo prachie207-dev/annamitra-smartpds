@@ -156,6 +156,29 @@ class AnnasetuAPI {
             body: JSON.stringify({ complaintId, actionText })
         });
     }
+
+    // Direct Citizen-to-Government Query Endpoints
+    async submitCitizenQuery(data) {
+        return this.request('/api/citizen/submit-query', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async getCitizenQueries(cardNumber) {
+        return this.request(`/api/citizen/queries?cardNumber=${encodeURIComponent(cardNumber)}`);
+    }
+
+    async getAdminQueries() {
+        return this.request('/api/admin/queries');
+    }
+
+    async replyAdminQuery(data) {
+        return this.request('/api/admin/reply-query', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
 }
 
 window.annasetuApi = new AnnasetuAPI();

@@ -94,8 +94,16 @@ class AnnasetuApp {
     }
 }
 
-// Bootstrap on DOM Ready
-document.addEventListener('DOMContentLoaded', () => {
-    window.annasetuApp = new AnnasetuApp();
-    window.annasetuApp.init();
-});
+// Bootstrap on DOM Ready or immediately if DOM is already ready
+function bootstrapAnnaMitra() {
+    if (!window.annasetuApp) {
+        window.annasetuApp = new AnnasetuApp();
+        window.annasetuApp.init();
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrapAnnaMitra);
+} else {
+    bootstrapAnnaMitra();
+}

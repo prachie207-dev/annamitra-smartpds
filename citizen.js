@@ -1,6 +1,7 @@
 /**
- * Annasetu (अन्नसेतू) - Citizen Portal Logic
- * Renders data exclusively for the authenticated citizen cardholder.
+ * AnnaMitra (अन्नमित्र) - Citizen Portal Logic
+ * Implements Profile, Grain Quotas, 3 Daytime Slots, Active Token Pass with QR & OTP,
+ * Shop Stock Preview, Linked Family Members, Passbook, SOS, and Gov Queries.
  */
 
 class CitizenPortal {
@@ -22,12 +23,13 @@ class CitizenPortal {
         const shop = this.store.getShop(citizen.assignedFPS);
 
         this.renderHeaderInfo(citizen, shop);
+        this.renderShopStockPreview(shop);
+        this.renderActiveToken(citizen, shop);
         this.renderQuotaCard(citizen);
         this.renderSlotSection(citizen, shop);
-        this.renderActiveToken(citizen, shop);
-        this.renderShopStockPreview(shop);
         this.renderFamilyMembers(citizen);
         this.renderPassbook(citizen);
+        this.renderQueries(citizen);
     }
 
     renderHeaderInfo(citizen, shop) {
@@ -36,22 +38,48 @@ class CitizenPortal {
         const cardCategoryEl = document.getElementById('citizen-card-category');
         const shopNameEl = document.getElementById('citizen-assigned-shop');
         const districtEl = document.getElementById('citizen-district-tag');
+        const switcherEl = document.getElementById('demo-beneficiary-switcher');
 
-        const currentLang = this.i18n.currentLang;
+        const currentLang = this.i18n ? this.i18n.currentLang : 'mr';
         let displayName = citizen.headOfFamily;
-        if (currentLang === 'mr') displayName = citizen.headOfFamilyMarathi;
-        if (currentLang === 'hi') displayName = citizen.headOfFamilyHindi;
+        if (currentLang === 'mr' && citizen.headOfFamilyMarathi) displayName = citizen.headOfFamilyMarathi;
 
         if (nameEl) nameEl.textContent = displayName;
         if (cardNoEl) cardNoEl.textContent = citizen.cardNumber;
-        if (districtEl) districtEl.textContent = citizen.district || 'Maharashtra';
+        if (districtEl) districtEl.textContent = citizen.district || 'Pune Rural';
         if (cardCategoryEl) {
-            cardCategoryEl.textContent = citizen.categoryName;
-            cardCategoryEl.className = `badge badge-${citizen.cardColor}`;
+            cardCategoryEl.textContent = citizen.categoryName || (citizen.category === 'AAY' ? 'Antyodaya Anna Yojana (पिवळे कार्ड)' : 'Priority Household (केशरी कार्ड)');
+            cardCategoryEl.className = `badge badge-${citizen.cardColor || 'orange'}`;
         }
         if (shopNameEl) {
             shopNameEl.textContent = `${shop.name} (${shop.id})`;
         }
+        if (switcherEl && switcherEl.value !== citizen.cardNumber) {
+            switcherEl.value = citizen.cardNumber;
+        }
+    }
+
+    renderShopStockPreview(shop) {
+        const container = document.getElementById('citizen-shop-stock-preview');
+        if (!container) return;
+
+        const availRice = shop.inventory.rice.dispatched - shop.inventory.rice.distributed;
+        const availWheat = shop.inventory.wheat.dispatched - shop.inventory.wheat.distributed;
+        const availSugar = shop.inventory.sugar.dispatched - shop.inventory.sugar.distributed;
+
+        container.innerHTML = `
+            <div class="shop-stock-banner" style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 16px 20px; box-shadow: var(--shadow-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 8px;">
+                <div class="shop-banner-info">
+                    <h4 style="margin: 0 0 4px 0; color: var(--primary-navy); font-size: 1.05rem;">📦 ${shop.name} (#${shop.id})</h4>
+                    <p style="margin: 0; font-size: 0.875rem; color: #64748b;">Official Warehouse Dispatch Arrived: <strong>${shop.godownDeliveryDate}</strong> | Status: <strong style="color: #10b981;">🟢 In Stock</strong></p>
+                </div>
+                <div class="shop-stock-pills" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <span class="stock-pill" style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 0.875rem; color: #334155;">🌾 Wheat: <strong>${availWheat.toLocaleString()} kg</strong></span>
+                    <span class="stock-pill" style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 0.875rem; color: #334155;">🧂 Sugar: <strong>${availSugar.toLocaleString()} kg</strong></span>
+                    <span class="stock-pill" style="background: #f1f5f9; padding: 6px 12px; border-radius: 6px; font-size: 0.875rem; color: #334155;">🍚 Rice: <strong>${availRice.toLocaleString()} kg</strong></span>
+                </div>
+            </div>
+        `;
     }
 
     renderQuotaCard(citizen) {
@@ -62,44 +90,44 @@ class CitizenPortal {
         const totalAmount = quota.rice.total + quota.wheat.total + quota.sugar.total + (quota.oil ? quota.oil.total : 0);
 
         const isCollected = quota.status === 'COLLECTED';
-        const isBooked = quota.status === 'BOOKED';
+        const isBooked = quota.status === 'BOOKED' || citizen.activeToken !== null;
 
         const statusBadge = document.getElementById('quota-status-badge');
         if (statusBadge) {
             if (isCollected) {
                 statusBadge.className = 'status-pill status-success';
-                statusBadge.innerHTML = '✅ ' + this.i18n.t('collected');
+                statusBadge.innerHTML = '✅ वितरित (Collected)';
             } else if (isBooked) {
                 statusBadge.className = 'status-pill status-booked';
-                statusBadge.innerHTML = '🎫 ' + this.i18n.t('booked');
+                statusBadge.innerHTML = '🎫 टोकन बुक (Token Booked)';
             } else {
                 statusBadge.className = 'status-pill status-available';
-                statusBadge.innerHTML = '🟢 ' + this.i18n.t('available');
+                statusBadge.innerHTML = '🟢 उपलब्ध (Available)';
             }
         }
 
         const items = [
             {
-                nameKey: 'rice',
+                name: 'तांदूळ (Rice)',
                 icon: '🍚',
-                qty: `${quota.rice.kg} ${this.i18n.t('kg')}`,
-                rate: quota.rice.ratePerKg === 0 ? this.i18n.t('free') : `₹${quota.rice.ratePerKg}/${this.i18n.t('kg')}`,
+                qty: `${quota.rice.kg} kg`,
+                rate: quota.rice.ratePerKg === 0 ? '₹0 (Free)' : `₹${quota.rice.ratePerKg}/kg`,
                 total: `₹${quota.rice.total}`,
                 color: 'grain-rice'
             },
             {
-                nameKey: 'wheat',
+                name: 'गहू (Wheat)',
                 icon: '🌾',
-                qty: `${quota.wheat.kg} ${this.i18n.t('kg')}`,
-                rate: quota.wheat.ratePerKg === 0 ? this.i18n.t('free') : `₹${quota.wheat.ratePerKg}/${this.i18n.t('kg')}`,
+                qty: `${quota.wheat.kg} kg`,
+                rate: quota.wheat.ratePerKg === 0 ? '₹0 (Free)' : `₹${quota.wheat.ratePerKg}/kg`,
                 total: `₹${quota.wheat.total}`,
                 color: 'grain-wheat'
             },
             {
-                nameKey: 'sugar',
+                name: 'साखर (Sugar)',
                 icon: '🧂',
-                qty: `${quota.sugar.kg} ${this.i18n.t('kg')}`,
-                rate: `₹${quota.sugar.ratePerKg}/${this.i18n.t('kg')}`,
+                qty: `${quota.sugar.kg} kg`,
+                rate: `₹${quota.sugar.ratePerKg}/kg`,
                 total: `₹${quota.sugar.total}`,
                 color: 'grain-sugar'
             }
@@ -107,10 +135,10 @@ class CitizenPortal {
 
         if (quota.oil && quota.oil.litres > 0) {
             items.push({
-                nameKey: 'oil',
+                name: 'खाद्यतेल (Oil)',
                 icon: '🛢️',
-                qty: `${quota.oil.litres} ${this.i18n.t('litre')}`,
-                rate: `₹${quota.oil.ratePerLitre}/${this.i18n.t('litre')}`,
+                qty: `${quota.oil.litres} L`,
+                rate: `₹${quota.oil.ratePerLitre}/L`,
                 total: `₹${quota.oil.total}`,
                 color: 'grain-oil'
             });
@@ -120,7 +148,7 @@ class CitizenPortal {
             <div class="quota-card ${item.color}">
                 <div class="grain-icon-wrap">${item.icon}</div>
                 <div class="grain-details">
-                    <h3 class="grain-title">${this.i18n.t(item.nameKey)}</h3>
+                    <h3 class="grain-title">${item.name}</h3>
                     <div class="grain-quantity">${item.qty}</div>
                     <div class="grain-price-tag">
                         <span>${item.rate}</span>
@@ -137,16 +165,6 @@ class CitizenPortal {
     }
 
     renderSlotSection(citizen, shop) {
-        const slotSection = document.getElementById('slot-booking-section');
-        if (!slotSection) return;
-
-        if (citizen.activeToken || citizen.currentQuota.status === 'COLLECTED') {
-            slotSection.style.display = 'none';
-            return;
-        }
-
-        slotSection.style.display = 'block';
-
         const slot1Spots = Math.max(0, shop.slots.slot1.max - shop.slots.slot1.booked);
         const slot2Spots = Math.max(0, shop.slots.slot2.max - shop.slots.slot2.booked);
         const slot3Spots = Math.max(0, shop.slots.slot3.max - shop.slots.slot3.booked);
@@ -160,16 +178,16 @@ class CitizenPortal {
                 <div class="slot-header">
                     <span class="slot-icon">🌅</span>
                     <div class="slot-time-info">
-                        <h4>${this.i18n.t('slot1Title')}</h4>
+                        <h4>Morning Slot (10:00 AM – 12:00 PM)</h4>
                         <p class="slot-sub">10:00 AM – 12:00 PM</p>
                     </div>
                 </div>
                 <div class="slot-availability ${slot1Spots <= 5 ? 'spot-urgent' : 'spot-good'}">
                     <span class="pulse-dot"></span>
-                    <strong>${slot1Spots}</strong> ${this.i18n.t('spotsRemaining')}
+                    <strong>${slot1Spots}</strong> spots left
                 </div>
-                <button class="btn btn-primary btn-block btn-slot-book" data-slot-id="slot1">
-                    ${this.i18n.t('bookNowBtn')}
+                <button class="btn btn-success btn-block btn-slot-book" data-slot-id="slot1" style="background: #059669; border-color: #059669; font-weight: 700;">
+                    Book This Token ➔
                 </button>
             </div>
 
@@ -178,16 +196,16 @@ class CitizenPortal {
                 <div class="slot-header">
                     <span class="slot-icon">☀️</span>
                     <div class="slot-time-info">
-                        <h4>${this.i18n.t('slot2Title')}</h4>
+                        <h4>Mid-Day Slot (12:00 PM – 02:00 PM)</h4>
                         <p class="slot-sub">12:00 PM – 02:00 PM</p>
                     </div>
                 </div>
                 <div class="slot-availability ${slot2Spots <= 5 ? 'spot-urgent' : 'spot-good'}">
                     <span class="pulse-dot"></span>
-                    <strong>${slot2Spots}</strong> ${this.i18n.t('spotsRemaining')}
+                    <strong>${slot2Spots}</strong> spots left
                 </div>
-                <button class="btn btn-primary btn-block btn-slot-book" data-slot-id="slot2">
-                    ${this.i18n.t('bookNowBtn')}
+                <button class="btn btn-success btn-block btn-slot-book" data-slot-id="slot2" style="background: #059669; border-color: #059669; font-weight: 700;">
+                    Book This Token ➔
                 </button>
             </div>
 
@@ -196,16 +214,16 @@ class CitizenPortal {
                 <div class="slot-header">
                     <span class="slot-icon">🌇</span>
                     <div class="slot-time-info">
-                        <h4>${this.i18n.t('slot3Title')}</h4>
+                        <h4>Evening Slot (04:00 PM – 08:00 PM)</h4>
                         <p class="slot-sub">04:00 PM – 08:00 PM</p>
                     </div>
                 </div>
                 <div class="slot-availability ${slot3Spots <= 5 ? 'spot-urgent' : 'spot-good'}">
                     <span class="pulse-dot"></span>
-                    <strong>${slot3Spots}</strong> ${this.i18n.t('spotsRemaining')}
+                    <strong>${slot3Spots}</strong> spots left
                 </div>
-                <button class="btn btn-primary btn-block btn-slot-book" data-slot-id="slot3">
-                    ${this.i18n.t('bookNowBtn')}
+                <button class="btn btn-success btn-block btn-slot-book" data-slot-id="slot3" style="background: #059669; border-color: #059669; font-weight: 700;">
+                    Book This Token ➔
                 </button>
             </div>
         `;
@@ -224,7 +242,7 @@ class CitizenPortal {
         const token = citizen.activeToken;
 
         const currentServing = shop.currentServingToken || 14;
-        const tokenNumValue = parseInt(token.tokenNo.replace('TK-', '')) || 25;
+        const tokenNumValue = parseInt(token.tokenNo.replace('TK-', '')) || 29;
         const peopleAhead = Math.max(0, tokenNumValue - currentServing);
         const estimatedWaitMins = peopleAhead * 3;
 
@@ -233,11 +251,11 @@ class CitizenPortal {
         tokenSection.innerHTML = `
             <div class="token-pass-card">
                 <div class="token-pass-ribbon">
-                    <span>🟢 ${this.i18n.t('confirmed')}</span>
+                    <span>🟢 CONFIRMED • शासकीय डिजिटल पास</span>
                 </div>
                 <div class="token-top-bar">
                     <div>
-                        <span class="token-label">${this.i18n.t('tokenNo')}</span>
+                        <span class="token-label">TOKEN NUMBER</span>
                         <h2 class="token-display-number">${token.tokenNo}</h2>
                     </div>
                     <div class="token-qr-wrap">
@@ -247,62 +265,39 @@ class CitizenPortal {
 
                 <div class="token-details-grid">
                     <div class="token-info-item">
-                        <span class="token-sub-label">${this.i18n.t('assignedTime')}</span>
+                        <span class="token-sub-label">वेळ / Slot Time</span>
                         <strong>${token.slotLabel}</strong>
                     </div>
                     <div class="token-info-item">
-                        <span class="token-sub-label">${this.i18n.t('validDate')}</span>
+                        <span class="token-sub-label">दिनांक / Date</span>
                         <strong>${token.date}</strong>
                     </div>
                 </div>
 
                 <!-- 4-Digit High-Visibility Secure OTP -->
                 <div class="secure-otp-container">
-                    <span class="otp-heading">🔐 ${this.i18n.t('secureOtp')}</span>
+                    <span class="otp-heading">🔐 सुरक्षित ४-अंकी OTP (Show to Shopkeeper)</span>
                     <div class="otp-digits-box">
                         ${token.otp.split('').map(d => `<span class="otp-box-digit">${d}</span>`).join('')}
                     </div>
-                    <p class="otp-warning-note">⚠️ ${this.i18n.t('otpInstruction')}</p>
+                    <p class="otp-warning-note">⚠️ हा OTP धान्य घेताना दुकानदारास पडताळणीसाठी सांगा.</p>
                 </div>
 
                 <!-- Live Queue Radar Tracker -->
                 <div class="live-queue-radar">
                     <div class="queue-radar-header">
                         <span class="radar-live-badge">🔴 LIVE QUEUE</span>
-                        <span>${this.i18n.t('currentServing')} <strong>#${currentServing}</strong></span>
+                        <span>सध्या दुकान चालू टोकन: <strong>#${currentServing}</strong></span>
                     </div>
                     <div class="queue-wait-estimate">
-                        <span>⏳ ${this.i18n.t('yourTurnIn')} <strong>~${estimatedWaitMins} mins</strong> (${peopleAhead} families ahead)</span>
+                        <span>⏳ अंदाजे वेळ: <strong>~${estimatedWaitMins} मिनिटे</strong> (${peopleAhead} कुटुंबे पुढे आहेत)</span>
                     </div>
                 </div>
 
-                <div class="token-actions">
-                    <button class="btn btn-danger-outline" id="btn-cancel-active-token">
-                        ${this.i18n.t('cancelTokenBtn')}
+                <div class="token-actions" style="margin-top: 12px; display: flex; justify-content: flex-end;">
+                    <button class="btn btn-outline" id="btn-cancel-active-token" style="color: #dc2626; border-color: #fca5a5;">
+                        टोकन रद्द करा (Cancel Token) ❌
                     </button>
-                </div>
-            </div>
-        `;
-    }
-
-    renderShopStockPreview(shop) {
-        const container = document.getElementById('citizen-shop-stock-preview');
-        if (!container) return;
-
-        const availRice = shop.inventory.rice.dispatched - shop.inventory.rice.distributed;
-        const availWheat = shop.inventory.wheat.dispatched - shop.inventory.wheat.distributed;
-        const availSugar = shop.inventory.sugar.dispatched - shop.inventory.sugar.distributed;
-
-        container.innerHTML = `
-            <div class="shop-stock-banner">
-                <div class="shop-banner-info">
-                    <h4>🏪 ${shop.name} (#${shop.id})</h4>
-                    <p>📦 Official Warehouse Dispatch Arrived: <strong>${shop.godownDeliveryDate}</strong> | Status: <strong class="text-success">🟢 In Stock</strong></p>
-                </div>
-                <div class="shop-stock-pills">
-                    <span class="stock-pill">🍚 Rice: <strong>${availRice.toLocaleString()} kg</strong></span>
-                    <span class="stock-pill">🌾 Wheat: <strong>${availWheat.toLocaleString()} kg</strong></span>
-                    <span class="stock-pill">🧂 Sugar: <strong>${availSugar.toLocaleString()} kg</strong></span>
                 </div>
             </div>
         `;
@@ -312,39 +307,41 @@ class CitizenPortal {
         const container = document.getElementById('family-members-grid');
         if (!container) return;
 
-        container.innerHTML = citizen.familyMembers.map(m => `
-            <div class="family-card">
-                <div class="family-avatar">${m.photo}</div>
-                <div class="family-details">
-                    <h4>${m.name}</h4>
-                    <p>${m.relation} • ${m.age} yrs</p>
-                    <span class="aadhaar-badge ${m.aadhaarLinked ? 'aadhaar-verified' : 'aadhaar-pending'}">
-                        ${m.aadhaarLinked ? this.i18n.t('aadhaarLinked') : this.i18n.t('aadhaarPending')}
-                    </span>
-                </div>
+        container.innerHTML = `
+            <div class="family-members-cards-wrap" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; width: 100%;">
+                ${citizen.familyMembers.map(m => `
+                    <div class="family-card" style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 16px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow-subtle);">
+                        <div class="family-avatar" style="font-size: 2.2rem; background: #f1f5f9; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">${m.photo || '👤'}</div>
+                        <div class="family-details">
+                            <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; color: var(--primary-navy);">${m.name}</h4>
+                            <p style="margin: 0 0 4px 0; font-size: 0.8rem; color: #64748b;">${m.relation} • ${m.age} yrs</p>
+                            <span class="badge" style="background: #dcfce7; color: #166534; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px;">✅ Aadhaar Verified</span>
+                        </div>
+                    </div>
+                `).join('')}
             </div>
-        `).join('');
+            ${citizen.activeToken ? `
+                <div style="margin-top: 14px; text-align: right; width: 100%;">
+                    <button class="btn btn-success" id="btn-scroll-to-token" style="background: #059669; border-color: #059669; font-weight: 700;">
+                        🎫 Token Booked: ${citizen.activeToken.tokenNo} ➔
+                    </button>
+                </div>
+            ` : ''}
+        `;
     }
 
     renderPassbook(citizen) {
         const container = document.getElementById('passbook-history-list');
         if (!container) return;
 
-        if (!citizen.passbook || citizen.passbook.length === 0) {
-            container.innerHTML = `<div class="empty-state-card"><p>No previous passbook receipts found.</p></div>`;
-            return;
-        }
-
-        container.innerHTML = citizen.passbook.map(entry => `
-            <div class="passbook-item-card">
+        container.innerHTML = (citizen.passbook || []).map(entry => `
+            <div class="passbook-card">
                 <div class="passbook-card-header">
                     <div>
-                        <span class="passbook-month">📅 ${entry.month}</span>
-                        <div class="passbook-datetime">${entry.date}</div>
+                        <span class="passbook-month-tag">📅 ${entry.month}</span>
+                        <strong style="margin-left: 8px;">Receipt #${entry.receiptId}</strong>
                     </div>
-                    <div class="passbook-receipt-badge">
-                        ${entry.receiptId}
-                    </div>
+                    <span class="passbook-date">${entry.date}</span>
                 </div>
                 <div class="passbook-items-summary">
                     ${entry.items.map(item => `
@@ -400,7 +397,95 @@ class CitizenPortal {
         `;
     }
 
+    async renderQueries(citizen) {
+        const container = document.getElementById('citizen-queries-feed');
+        if (!container || !citizen) return;
+
+        const res = await this.api.getCitizenQueries(citizen.cardNumber);
+        const queries = (res && res.success) ? res.queries : [];
+
+        if (!queries || queries.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state-box" style="padding: 24px; text-align: center; color: var(--text-muted); background: #f8fafc; border-radius: var(--radius-md); border: 1px dashed var(--border-light);">
+                    <div style="font-size: 2rem; margin-bottom: 6px;">💬</div>
+                    <p>आपण अद्याप शासनाकडे कोणताही प्रश्न विचारलेला नाही.</p>
+                    <small>वरील फॉर्म भरून आपण थेट अन्न व नागरी पुरवठा अधिकाऱ्यांशी संवाद साधू शकता.</small>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = queries.map(q => {
+            const isReplied = q.status === 'OFFICER_REPLIED';
+            return `
+                <div class="query-ticket-card ${isReplied ? 'query-replied' : 'query-pending'}">
+                    <div class="query-ticket-header">
+                        <div class="query-meta-left">
+                            <span class="query-id-tag">#${q.id}</span>
+                            <span class="query-category-tag">${q.categoryLabel || q.category}</span>
+                        </div>
+                        <span class="query-status-badge ${isReplied ? 'badge-replied' : 'badge-pending'}">
+                            ${isReplied ? '✅ अधिकृत उत्तर प्राप्त (Officer Replied)' : '⏳ शासकीय तपासणी प्रलंबित (Pending Review)'}
+                        </span>
+                    </div>
+
+                    <div class="query-question-body">
+                        <h5>${q.subject}</h5>
+                        <p class="query-text">${q.message}</p>
+                        <span class="query-time">📅 विचारले: ${q.submittedAt}</span>
+                    </div>
+
+                    ${isReplied ? `
+                        <div class="query-officer-response">
+                            <div class="officer-response-header">
+                                <div class="officer-seal-icon">🏛️</div>
+                                <div>
+                                    <strong>${q.officerName || 'District Civil Supplies Officer (DSO)'}</strong>
+                                    <span class="officer-time">उत्तर दिले: ${q.repliedAt}</span>
+                                </div>
+                                <span class="gov-verified-stamp">✓ शासकीय अधिकृत उत्तर</span>
+                            </div>
+                            <div class="officer-response-content">
+                                <p>${q.officerReply}</p>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="query-pending-notice">
+                            <span>⏳ आपल्या प्रश्नाची दखल घेण्यात आली असून, जिल्हा पुरवठा अधिकारी लवकरच उत्तर देतील.</span>
+                        </div>
+                    `}
+                </div>
+            `;
+        }).join('');
+    }
+
     bindEvents() {
+        // Beneficiary Demo Switcher Dropdown
+        document.addEventListener('change', (e) => {
+            if (e.target && e.target.id === 'demo-beneficiary-switcher') {
+                const targetCard = e.target.value;
+                if (this.store) {
+                    this.store.state.session.citizenCard = targetCard;
+                    this.store.saveState();
+                    if (window.annasetuApp) {
+                        const newCitizen = this.store.getCurrentCitizen();
+                        window.annasetuApp.showToast(`Switched to ${newCitizen ? newCitizen.headOfFamily : targetCard}`, 'info');
+                    }
+                    this.renderAll();
+                }
+            }
+        });
+
+        // Scroll to Booked Token
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#btn-scroll-to-token, #btn-view-booked-token-badge')) {
+                const tokenSection = document.getElementById('active-token-section');
+                if (tokenSection) {
+                    tokenSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
         // Slot Booking Buttons
         document.addEventListener('click', async (e) => {
             const btn = e.target.closest('.btn-slot-book');
@@ -413,9 +498,11 @@ class CitizenPortal {
                     citizen.activeToken = result.token;
                     this.store.saveState();
                     if (window.annasetuApp) {
-                        window.annasetuApp.showToast(`✅ ${this.i18n.t('booked')}: ${result.token.tokenNo}`, 'success');
+                        window.annasetuApp.showToast(`✅ Token Booked: ${result.token.tokenNo} (OTP: ${result.token.otp})`, 'success');
                     }
                     this.renderAll();
+                    const tokenSection = document.getElementById('active-token-section');
+                    if (tokenSection) tokenSection.scrollIntoView({ behavior: 'smooth' });
                 } else {
                     alert(result.error || 'Failed to book slot.');
                 }
@@ -433,7 +520,7 @@ class CitizenPortal {
                         citizen.activeToken = null;
                         this.store.saveState();
                         if (window.annasetuApp) {
-                            window.annasetuApp.showToast('Token cancelled.', 'info');
+                            window.annasetuApp.showToast('Token cancelled successfully.', 'info');
                         }
                         this.renderAll();
                     }
@@ -464,8 +551,50 @@ class CitizenPortal {
                     const modal = document.getElementById('sos-complaint-modal');
                     if (modal) modal.classList.remove('modal-active');
                     if (window.annasetuApp) {
-                        window.annasetuApp.showToast(`🚨 ${this.i18n.t('sosModalTitle')} #${result.complaint.id}`, 'error');
+                        window.annasetuApp.showToast(`🚨 SOS Grievance Dispatched #${result.complaint.id}`, 'error');
                     }
+                }
+            });
+        }
+
+        // Citizen Query Submission Form Submit
+        const queryForm = document.getElementById('form-citizen-query');
+        if (queryForm) {
+            queryForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const category = document.getElementById('query-category')?.value || 'GENERAL';
+                const subject = document.getElementById('query-subject')?.value || '';
+                const message = document.getElementById('query-message')?.value || '';
+                const submitBtn = document.getElementById('btn-submit-citizen-query');
+
+                const citizen = this.store.getCurrentCitizen();
+                if (!citizen) return;
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '⏳ पाठवत आहे... (Submitting)';
+                }
+
+                const result = await this.api.submitCitizenQuery({
+                    cardNumber: citizen.cardNumber,
+                    category: category,
+                    subject: subject,
+                    message: message
+                });
+
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'शासनाला प्रश्न पाठवा 🚀';
+                }
+
+                if (result.success) {
+                    queryForm.reset();
+                    if (window.annasetuApp) {
+                        window.annasetuApp.showToast('✅ आपला प्रश्न शासनाकडे यशस्वीरित्या नोंदवला गेला!', 'success');
+                    }
+                    this.renderQueries(citizen);
+                } else {
+                    alert(result.error || 'Failed to submit query. Please try again.');
                 }
             });
         }

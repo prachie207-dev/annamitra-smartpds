@@ -102,27 +102,8 @@ class AuthManager {
             const roleCard = e.target.closest('.home-role-card');
             if (roleCard) {
                 const targetRole = roleCard.getAttribute('data-target-role');
-                if (targetRole === 'admin') {
-                    // Direct 1-Click Access to Government Command Desk (No login wall)
-                    if (this.store) {
-                        this.store.state.session = {
-                            isLoggedIn: true,
-                            role: 'admin',
-                            adminId: 'DSO-MAHARASHTRA'
-                        };
-                        this.store.saveState();
-                    }
-                    if (window.annasetuApp) {
-                        window.annasetuApp.showToast('🏛️ Government Command Center Active.', 'info');
-                    }
-                    this.showPortal('admin');
-                } else if (targetRole) {
-                    const session = this.store && this.store.state ? this.store.state.session : null;
-                    if (session && session.isLoggedIn && session.role === targetRole) {
-                        this.showPortal(targetRole);
-                    } else {
-                        this.showView(`view-login-${targetRole}`);
-                    }
+                if (window.openRolePortal) {
+                    window.openRolePortal(targetRole);
                 }
                 return;
             }
@@ -454,3 +435,33 @@ class AuthManager {
 }
 
 window.annasetuAuth = new AuthManager();
+
+// Global 100% Direct Portal Opener Function
+window.openRolePortal = function(targetRole) {
+    if (!window.annasetuAuth) {
+        window.annasetuAuth = new AuthManager();
+        window.annasetuAuth.init();
+    }
+
+    if (targetRole === 'admin') {
+        if (window.annasetuStore) {
+            window.annasetuStore.state.session = {
+                isLoggedIn: true,
+                role: 'admin',
+                adminId: 'DSO-MAHARASHTRA'
+            };
+            window.annasetuStore.saveState();
+        }
+        if (window.annasetuApp) {
+            window.annasetuApp.showToast('🏛️ Government Command Center Active.', 'info');
+        }
+        window.annasetuAuth.showPortal('admin');
+    } else if (targetRole) {
+        const session = window.annasetuStore && window.annasetuStore.state ? window.annasetuStore.state.session : null;
+        if (session && session.isLoggedIn && session.role === targetRole) {
+            window.annasetuAuth.showPortal(targetRole);
+        } else {
+            window.annasetuAuth.showView(`view-login-${targetRole}`);
+        }
+    }
+};

@@ -165,7 +165,24 @@ const i18n = {
         statActiveGrievances: 'सक्रिय नागरिक तक्रारी',
         aiFraudDetection: '🤖 AI गैरप्रकार व अनियमितता रडार',
         grievanceDesk: 'तातडीचे नागरिक SOS व निवारण कक्ष',
-        resolveBtn: 'कारवाई पूर्ण करा'
+        resolveBtn: 'कारवाई पूर्ण करा',
+
+        // Direct Citizen-to-Gov Query
+        queryDeskTitle: '💬 थेट शासकीय मदत व शंका निवारण',
+        queryDeskSub: 'आपले रेशन कार्ड, धान्य कोटा किंवा योजनेबाबत थेट अन्न व नागरी पुरवठा विभागाकडे प्रश्न विचारा.',
+        queryCategory: 'चौकशीचा विषय निवडा',
+        queryCategoryMember: '🏷️ रेशन कार्ड नाव / सदस्य बदल चौकशी',
+        queryCategoryQuota: '⚖️ धान्य कोटा व सवलत दर माहिती',
+        queryCategoryShop: '📍 रेशन दुकान स्थलांतर विनंती',
+        queryCategoryScheme: '📜 अंत्योदय / प्राधान्य कुटुंब पात्रता',
+        queryCategoryGeneral: '❓ सर्वसाधारण शासकीय मदत व चौकशी',
+        querySubject: 'विषय (थोडक्यात)',
+        queryMessage: 'आपला प्रश्न / समस्या सविस्तर लिहा',
+        submitQueryBtn: 'शासनाला प्रश्न पाठवा 🚀',
+        myQueriesTitle: '📋 माझे विचारलेले प्रश्न व शासकीय उत्तरे',
+        adminQueryTitle: '📬 थेट नागरिक प्रश्न व शंका निवारण डेस्क',
+        adminQuerySubtitle: 'नागरिकांनी विचारलेल्या सर्व प्रश्नांची थेट यादी व अधिकृत मार्गदर्शन निवारण कक्ष',
+        replyBtn: 'अधिकृत उत्तर पाठवा ✍️'
     },
     hi: {
         appTitle: 'अन्नमित्र',
@@ -313,7 +330,24 @@ const i18n = {
         statActiveGrievances: 'सक्रिय नागरिक शिकायतें',
         aiFraudDetection: '🤖 AI धोखाधड़ी एवं अनियमितता रडार',
         grievanceDesk: 'नागरिक SOS आपातकालीन निवारण डेस्क',
-        resolveBtn: 'मामला सुलझाएं'
+        resolveBtn: 'मामला सुलझाएं',
+
+        // Direct Citizen-to-Gov Query
+        queryDeskTitle: '💬 सीधा सरकारी सहायता एवं समाधान केंद्र',
+        queryDeskSub: 'अपने राशन कार्ड, कोटा या योजना के बारे में सीधे खाद्य विभाग से प्रश्न पूछें।',
+        queryCategory: 'पूछताछ की श्रेणी चुनें',
+        queryCategoryMember: '🏷️ राशन कार्ड में नाम / सदस्य बदलाव पूछताछ',
+        queryCategoryQuota: '⚖️ अनाज कोटा एवं रियायती दर जानकारी',
+        queryCategoryShop: '📍 राशन दुकान स्थानांतरण अनुरोध',
+        queryCategoryScheme: '📜 अंत्योदय / प्राथमिकता परिवार पात्रता',
+        queryCategoryGeneral: '❓ सामान्य सरकारी सहायता एवं पूछताछ',
+        querySubject: 'विषय (संक्षेप में)',
+        queryMessage: 'अपना प्रश्न / समस्या विस्तार से लिखें',
+        submitQueryBtn: 'सरकार को प्रश्न भेजें 🚀',
+        myQueriesTitle: '📋 मेरे पूछे गए प्रश्न एवं सरकारी उत्तर',
+        adminQueryTitle: '📬 सीधा नागरिक प्रश्न एवं सहायता डेस्क',
+        adminQuerySubtitle: 'नागरिकों द्वारा पूछे गए सभी प्रश्नों की लाइव सूची एवं आधिकारिक समाधान',
+        replyBtn: 'आधिकारिक उत्तर भेजें ✍️'
     },
     en: {
         appTitle: 'AnnaMitra',
@@ -461,7 +495,24 @@ const i18n = {
         statActiveGrievances: 'Active Grievances',
         aiFraudDetection: '🤖 AI Fraud & Anomaly Detection Radar',
         grievanceDesk: 'Emergency Citizen SOS Redressal Desk',
-        resolveBtn: 'Resolve & Close'
+        resolveBtn: 'Resolve & Close',
+
+        // Direct Citizen-to-Gov Query
+        queryDeskTitle: '💬 Direct Citizen-to-Government Query & Helpdesk',
+        queryDeskSub: 'Ask questions regarding your ration card, grain quotas, or government welfare schemes directly to the Food Supplies Department.',
+        queryCategory: 'Select Inquiry Category',
+        queryCategoryMember: '🏷️ Ration Card Name / Member Update Inquiry',
+        queryCategoryQuota: '⚖️ Quota & Subsidized Grain Pricing Clarification',
+        queryCategoryShop: '📍 Fair Price Shop Relocation / Dealer Change Request',
+        queryCategoryScheme: '📜 Antyodaya / Priority Household Scheme Eligibility',
+        queryCategoryGeneral: '❓ General Government Support & Inquiry',
+        querySubject: 'Subject (Brief)',
+        queryMessage: 'Detailed Question / Problem Description',
+        submitQueryBtn: 'Submit Query to Government 🚀',
+        myQueriesTitle: '📋 My Submitted Queries & Official Responses',
+        adminQueryTitle: '📬 Direct Citizen Query & Support Desk',
+        adminQuerySubtitle: 'Live statewide feed of citizen inquiries with official officer resolution desk',
+        replyBtn: 'Send Official Reply ✍️'
     }
 };
 
