@@ -343,36 +343,23 @@ class AuthManager {
 
         const result = await this.api.loginCitizen(cardNo, pin);
         if (result.success) {
-            if (result.role === 'shopkeeper') {
-                if (this.store) {
-                    this.store.state.session = {
-                        isLoggedIn: true,
-                        role: 'shopkeeper',
-                        shopId: result.shop.id
-                    };
-                    this.store.saveState();
-                }
-                if (window.annasetuApp) {
-                    window.annasetuApp.showToast(`🏪 Shopkeeper Login: Welcome ${result.shop.dealerName}!`, 'success');
-                }
-                this.showPortal('shopkeeper');
-            } else {
-                if (this.store) {
-                    this.store.state.session = {
-                        isLoggedIn: true,
-                        role: 'citizen',
-                        citizenCard: result.user.cardNumber
-                    };
-                    this.store.saveState();
-                }
-
-                if (window.annasetuApp) {
-                    window.annasetuApp.showToast(`Welcome ${result.user.headOfFamily}!`, 'success');
-                }
-                this.showPortal('citizen');
+            if (this.store) {
+                this.store.state.session = {
+                    isLoggedIn: true,
+                    role: 'citizen',
+                    citizenCard: result.user.cardNumber
+                };
+                this.store.saveState();
             }
+
+            if (window.annasetuApp) {
+                window.annasetuApp.showToast(`Welcome ${result.user.headOfFamily}!`, 'success');
+            }
+            this.showPortal('citizen');
         } else {
-            alert(result.error || 'Invalid Ration Card Number or Password. (Default PIN: 1234)');
+            if (window.annasetuApp) {
+                window.annasetuApp.showToast(result.error || 'Invalid Ration Card Number or Password. (PIN: 1111)', 'error');
+            }
         }
     }
 
@@ -400,7 +387,9 @@ class AuthManager {
             }
             this.showPortal('shopkeeper');
         } else {
-            alert(result.error || 'Invalid Fair Price Shop ID or Password. (Default: 1234 / admin)');
+            if (window.annasetuApp) {
+                window.annasetuApp.showToast(result.error || 'Invalid Fair Price Shop ID or Password. (Password: shop8888)', 'error');
+            }
         }
     }
 
