@@ -18,16 +18,13 @@ class AuthManager {
     }
 
     restoreSession() {
-        if (!this.store || !this.store.state) {
-            this.showView('view-homepage');
-            return;
+        // ALWAYS reset active session and open Homepage on fresh visits / refreshes
+        if (this.store && this.store.state && this.store.state.session) {
+            this.store.state.session.isLoggedIn = false;
+            this.store.state.session.role = null;
+            this.store.saveState();
         }
-        const session = this.store.state.session;
-        if (session && session.isLoggedIn && session.role) {
-            this.showPortal(session.role);
-        } else {
-            this.showView('view-homepage');
-        }
+        this.showView('view-homepage');
     }
 
     showView(viewId) {
@@ -41,10 +38,7 @@ class AuthManager {
 
         const loggedInBar = document.getElementById('logged-in-user-bar');
         if (loggedInBar) {
-            const session = this.store && this.store.state ? this.store.state.session : null;
             if (viewId.startsWith('portal-')) {
-                loggedInBar.style.display = 'flex';
-            } else if (session && session.isLoggedIn && session.role !== 'admin') {
                 loggedInBar.style.display = 'flex';
             } else {
                 loggedInBar.style.display = 'none';
@@ -83,8 +77,8 @@ class AuthManager {
             }
         } else if (role === 'admin') {
             if (userBarName) userBarName.textContent = 'District Civil Supplies Officer (DSO)';
-            if (userBarRole) userBarRole.textContent = 'Government of Maharashtra Command Desk';
-            if (logoutBtn) logoutBtn.style.display = 'none';
+            if (userBarRole) userBarRole.textContent = 'Government Command Desk (शासकीय कक्ष)';
+            if (logoutBtn) logoutBtn.style.display = 'inline-flex';
             if (window.annasetuAdmin && typeof window.annasetuAdmin.renderAll === 'function') {
                 window.annasetuAdmin.renderAll();
             }
