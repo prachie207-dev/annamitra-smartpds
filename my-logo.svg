@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b2545" />
+      <stop offset="100%" stop-color="#134074" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#logoGrad)" />
+  <circle cx="100" cy="100" r="75" fill="none" stroke="#d97706" stroke-width="6" stroke-dasharray="8 4"/>
+  <text x="100" y="115" font-family="'Segoe UI', Roboto, sans-serif" font-size="70" text-anchor="middle" fill="#34d399">🌾</text>
+  <text x="100" y="165" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff" letter-spacing="2">ANNAMITRA</text>
+</svg>

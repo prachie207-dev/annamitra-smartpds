@@ -42,7 +42,7 @@
             <div class="brand-section" onclick="window.annasetuAuth && window.annasetuAuth.showView('view-homepage')">
                 <!-- Official Circular Emblem Logo -->
                 <div class="brand-logo-wrap">
-                    <img src="/images/my-logo.png" alt="Ration Store Smart PDS Logo" class="brand-logo-img" id="app-brand-logo" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                    <img src="my-logo.png" alt="Ration Store Smart PDS Logo" class="brand-logo-img" id="app-brand-logo" onerror="this.onerror=null; this.src='images/my-logo.png'; if(!this.complete){this.src='my-logo.svg';}" />
                 </div>
                 <div class="brand-title-wrap">
                     <h1 data-i18n="appTitle">अन्नमित्र</h1>
@@ -85,7 +85,7 @@
             <!-- Hero Container -->
             <div class="home-hero-container">
                 <div class="hero-emblem-badge-wrap">
-                    <img src="/images/my-logo.png" alt="Ration Store Emblem" class="hero-emblem-badge-img" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                    <img src="my-logo.png" alt="Ration Store Emblem" class="hero-emblem-badge-img" onerror="this.onerror=null; this.src='images/my-logo.png'; if(!this.complete){this.src='my-logo.svg';}" />
                 </div>
                 <span class="hero-tagline" data-i18n="heroTag">RATION STORE • SMART RATION, STRONG NATION</span>
                 <h1 class="hero-main-heading" data-i18n="heroTitle">स्मार्ट सार्वजनिक वितरण प्रणाली (SMARTPDS)</h1>
@@ -221,7 +221,7 @@
                 
                 <div class="login-card-container">
                     <div class="login-top-icons">
-                        <img src="/images/my-logo.png" alt="Ration Store Logo" class="login-brand-logo-img" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                        <img src="my-logo.png" alt="Ration Store Logo" class="login-brand-logo-img" onerror="this.onerror=null; this.src='images/my-logo.png'; if(!this.complete){this.src='my-logo.svg';}" />
                     </div>
                     <h2 data-i18n="loginCitizenHeading">Login to ANNAMITRA</h2>
                     <p class="login-subtitle" data-i18n="loginCitizenSub">See your ration, family & shop details</p>
@@ -359,7 +359,7 @@
                 
                 <div class="login-card-container">
                     <div class="login-top-icons">
-                        <img src="/images/my-logo.png" alt="Ration Store Logo" class="login-brand-logo-img" onerror="this.onerror=null; this.src='/images/my-logo.svg';" />
+                        <img src="my-logo.png" alt="Ration Store Logo" class="login-brand-logo-img" onerror="this.onerror=null; this.src='images/my-logo.png'; if(!this.complete){this.src='my-logo.svg';}" />
                     </div>
                     <h2 data-i18n="loginShopkeeperHeading">Shopkeeper Terminal Login</h2>
                     <p class="login-subtitle" data-i18n="loginShopkeeperSub">Access your Fair Price Shop counter system</p>
@@ -1035,14 +1035,15 @@
         </div>
     </div>
 
-    <!-- Application Scripts -->
-    <script src="js/data.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/i18n.js"></script>
-    <script src="js/citizen.js"></script>
-    <script src="js/shopkeeper.js"></script>
-    <script src="js/admin.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/app.js"></script>
+    <!-- Application Scripts with Universal Root & Subdirectory Fallbacks -->
+    <script src="data.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/data.js'; document.body.appendChild(s);"></script>
+    <script src="api.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/api.js'; document.body.appendChild(s);"></script>
+    <script src="i18n.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/i18n.js'; document.body.appendChild(s);"></script>
+    <script src="citizen.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/citizen.js'; document.body.appendChild(s);"></script>
+    <script src="shopkeeper.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/shopkeeper.js'; document.body.appendChild(s);"></script>
+    <script src="admin.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/admin.js'; document.body.appendChild(s);"></script>
+    <script src="auth.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/auth.js'; document.body.appendChild(s);"></script>
+    <script src="audio-assistant.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/audio-assistant.js'; document.body.appendChild(s);"></script>
+    <script src="app.js" onerror="this.onerror=null; var s=document.createElement('script'); s.src='js/app.js'; document.body.appendChild(s);"></script>
 </body>
 </html>
