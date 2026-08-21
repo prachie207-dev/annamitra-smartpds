@@ -74,9 +74,9 @@ class AnnasetuAPI {
             citizen = store.state.citizens[0]; // Default to Laxmibai
         }
 
-        const isValid = (cleanPin === '1111' || cleanPin === '1234' || cleanPin === citizen.pin || cleanPin === citizen.password);
+        const isValid = (cleanPin === citizen.pin || cleanPin === citizen.password || cleanPin === '1111' || cleanPin === '2222' || cleanPin === '3333' || cleanPin === '1234');
         if (!isValid) {
-            return { success: false, error: 'Invalid PIN. (Customer PIN: 1111)' };
+            return { success: false, error: `Invalid PIN. (पिन: ${citizen.pin || '1111'})` };
         }
 
         return {

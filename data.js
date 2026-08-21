@@ -3,7 +3,7 @@
  * State Management and 500+ Citizen Database with LocalStorage synchronization
  */
 
-const STORAGE_KEY = 'ANNASETU_PDS_STATE_V5';
+const STORAGE_KEY = 'ANNASETU_PDS_STATE_V7';
 
 function generate500Families() {
     const firstNames = [
@@ -30,7 +30,9 @@ function generate500Families() {
 
     const families = [];
 
-    // Family 1: Laxmibai Dashrath Gaikwad (MH-PDS-2026-4420)
+    // =========================================================================
+    // DEMO CITIZEN 1: Laxmibai Dashrath Gaikwad (PHH - केशरी कार्ड) | PIN: 1111
+    // =========================================================================
     families.push({
         cardNumber: 'MH-PDS-2026-4420',
         pin: '1111',
@@ -109,13 +111,15 @@ function generate500Families() {
         ]
     });
 
-    // Family 2: Tukaram Jadhav (AAY - पिवळे कार्ड)
+    // =========================================================================
+    // DEMO CITIZEN 2: Tukaram Ramchandra Jadhav (AAY - पिवळे कार्ड) | PIN: 2222
+    // =========================================================================
     families.push({
         cardNumber: 'MH-PDS-2026-0001',
-        pin: '1111',
-        password: '1111',
-        headOfFamily: 'Tukaram Pandurang Jadhav',
-        headOfFamilyMarathi: 'तुकाराम पांडुरंग जाधव',
+        pin: '2222',
+        password: '2222',
+        headOfFamily: 'Tukaram Ramchandra Jadhav',
+        headOfFamilyMarathi: 'तुकाराम रामचंद्र जाधव',
         gender: 'Male',
         category: 'AAY',
         cardColor: 'yellow',
@@ -156,7 +160,74 @@ function generate500Families() {
         passbook: []
     });
 
-    for (let i = 3; i <= 500; i++) {
+    // =========================================================================
+    // DEMO CITIZEN 3: Santoshrao Baburao Gaikwad (PHH - केशरी कार्ड) | PIN: 3333
+    // =========================================================================
+    families.push({
+        cardNumber: 'MH-PDS-2026-0003',
+        pin: '3333',
+        password: '3333',
+        headOfFamily: 'Santoshrao Baburao Gaikwad',
+        headOfFamilyMarathi: 'संतोषराव बाबुराव गायकवाड',
+        gender: 'Male',
+        category: 'PHH',
+        cardColor: 'orange',
+        categoryName: 'Priority Household (PHH - केशरी कार्ड)',
+        assignedFPS: 'FPS1001',
+        district: 'Pune Rural',
+        state: 'Maharashtra',
+        mobile: '9822010003',
+        familyMembers: [
+            {
+                name: 'Santoshrao Gaikwad (संतोषराव गायकवाड)',
+                relation: 'Head',
+                age: 46,
+                gender: 'Male',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-3003',
+                photo: '👨‍🌾'
+            },
+            {
+                name: 'Anusaya Gaikwad (अनुसया गायकवाड)',
+                relation: 'Wife',
+                age: 41,
+                gender: 'Female',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-3004',
+                photo: '🧕'
+            },
+            {
+                name: 'Sambhaji Gaikwad (संभाजी गायकवाड)',
+                relation: 'Son',
+                age: 19,
+                gender: 'Male',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-3005',
+                photo: '🧑'
+            },
+            {
+                name: 'Rani Gaikwad (राणी गायकवाड)',
+                relation: 'Daughter',
+                age: 16,
+                gender: 'Female',
+                aadhaarLinked: true,
+                aadhaarNo: 'XXXX-XXXX-3006',
+                photo: '👧'
+            }
+        ],
+        currentQuota: {
+            month: 'August 2026',
+            status: 'AVAILABLE',
+            rice: { kg: 12, ratePerKg: 0, total: 0 },
+            wheat: { kg: 8, ratePerKg: 0, total: 0 },
+            sugar: { kg: 1, ratePerKg: 20, total: 20 },
+            oil: { litres: 0, ratePerLitre: 100, total: 0 }
+        },
+        activeToken: null,
+        passbook: []
+    });
+
+    for (let i = 4; i <= 500; i++) {
         const cardNum = `MH-PDS-2026-${String(i).padStart(4, '0')}`;
         const fn = firstNames[(i - 1) % firstNames.length];
         const ln = lastNames[(i - 1) % lastNames.length];

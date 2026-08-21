@@ -137,6 +137,21 @@ class AuthManager {
                 return;
             }
 
+            // 4b. 1-Click Demo Citizen Account Switcher
+            const demoBtn = e.target.closest('.btn-demo-quick-fill');
+            if (demoBtn) {
+                const card = demoBtn.getAttribute('data-card');
+                const pin = demoBtn.getAttribute('data-pin');
+                const cardInput = document.getElementById('login-citizen-card');
+                const pinInput = document.getElementById('login-citizen-pin');
+                if (cardInput) cardInput.value = card;
+                if (pinInput) pinInput.value = pin;
+                if (window.annasetuApp) {
+                    window.annasetuApp.showToast(`🎯 निवडले: ${card} (पिन: ${pin})`, 'info');
+                }
+                return;
+            }
+
             // 5. Citizen Login Method Switcher Tabs
             const tabPin = e.target.closest('#tab-auth-pin');
             const tabFingerprint = e.target.closest('#tab-auth-fingerprint');
